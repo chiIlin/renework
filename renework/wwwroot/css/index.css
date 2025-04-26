@@ -1,3 +1,4 @@
+/* Hero Section */
 .hero-section {
     position: relative;
     width: 100%;
@@ -13,19 +14,13 @@
 @media (max-width: 768px) {
     .hero-section {
         background-image: url('/Assets/main2.png');
-        background-size: cover;
-        background-position: top center;
-        background-repeat: no-repeat;
-        background-attachment: scroll;
     }
 }
 
-
-
-
+/* CTA Button */
 .cta-container {
     position: absolute;
-    bottom: 10%; /* Відступ від низу, регулюй під себе */
+    bottom: 10%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -46,14 +41,12 @@
     letter-spacing: 1px;
     transition: background-color 0.3s ease, color 0.3s ease;
     font-family: 'Arial Narrow', Arial, sans-serif;
-    text-align: center;
 }
 
 /* Hover ефект */
 .cta-button:hover {
     background-color: rgba(214, 162, 67, 0.35);
     color: #ffffff;
-    text-decoration: none;
 }
 
 /* Адаптив для мобільних */
@@ -61,16 +54,246 @@
     .cta-button {
         padding: 0.7rem 2rem;
         font-size: 1.4rem;
-        letter-spacing: 0.8px;
-        border-width: 1.5px;
     }
 }
 
-/* Для дуже маленьких екранів */
 @media (max-width: 480px) {
     .cta-button {
         padding: 0.6rem 1.5rem;
         font-size: 1.2rem;
-        border-width: 1.2px;
+    }
+}
+
+/* Statistics Section */
+.statistics-section {
+    background-color: #000;
+    color: #fff;
+    padding: 60px 0;
+    text-align: center;
+}
+
+/* Titles */
+.section-title {
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+/* Counter Container */
+.counter-container {
+    margin-bottom: 60px;
+}
+
+/* Counter Display */
+.counter-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(20, 20, 20, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+    flex-wrap: nowrap;
+}
+
+.currency-symbol {
+    font-size: 3rem;
+    color: #D6A243;
+    font-weight: bold;
+    padding: 0 10px 0 0;
+}
+
+/* Digits Wrapper */
+.digits-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+}
+
+.digit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 60px;
+    background-color: white;
+    color: black;
+    font-size: 2.5rem;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Yearly Stats Section */
+.yearly-stats {
+    margin-bottom: 60px;
+}
+
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.stats-text {
+    flex: 1;
+    min-width: 300px;
+    text-align: left;
+    padding: 20px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.chart-placeholder {
+    flex: 1;
+    min-width: 300px;
+    height: 300px;
+    background-color: #222;
+    border-radius: 10px;
+    margin: 15px;
+}
+
+/* CTA Section */
+.cta-section {
+    margin: 40px 0;
+}
+
+.cta-title {
+    font-size: 2.2rem;
+    color: #4A78B0;
+    margin-bottom: 30px;
+}
+
+.start-button {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: transparent;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.start-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ================== Responsive ================== */
+
+@media (max-width: 768px) {
+    .statistics-section {
+        padding: 40px 15px;
+    }
+
+    .counter-display {
+        padding: 15px;
+    }
+
+    .digit {
+        width: 40px;
+        height: 50px;
+        font-size: 2rem;
+    }
+
+    .currency-symbol {
+        font-size: 2.5rem;
+    }
+
+    .stats-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stats-text, .chart-placeholder {
+        width: 100%;
+        text-align: center;
+    }
+
+    .cta-title {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .statistics-section {
+        padding: 30px 10px;
+    }
+
+    .counter-display {
+        flex-wrap: wrap;
+        padding: 15px;
+        max-width: 90%;
+    }
+
+    .currency-symbol {
+        font-size: 3.5rem;
+        padding-right: 5px;
+    }
+
+    .digits-wrapper {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 3px;
+    }
+
+    .digit {
+        width: 35px;
+        height: 45px;
+        font-size: 1.8rem;
+    }
+
+    .stats-text {
+        font-size: 1rem;
+    }
+
+    .chart-placeholder {
+        height: 250px;
+    }
+
+    .cta-title {
+        font-size: 1.6rem;
+    }
+
+    .start-button {
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+    }
+}
+
+
+.comma {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15px;
+    height: 60px;
+    font-size: 2.5rem;
+    color: white;
+    font-weight: bold;
+}
+@media (max-width: 768px) {
+    .comma {
+        width: 12px;
+        height: 50px;
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .comma {
+        width: 10px;
+        height: 45px;
+        font-size: 1.8rem;
     }
 }
