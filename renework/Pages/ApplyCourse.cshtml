@@ -1,0 +1,40 @@
+﻿@* Pages/ApplyCourse.cshtml *@
+@page "/course/{id}/apply"
+@model renework.Pages.ApplyCourseModel
+@using renework.MongoDB.Collections
+
+<h1 class="my-4">Apply for Course</h1>
+
+@if (Model.Course is null)
+{
+    <div class="alert alert-danger">Course not found.</div>
+}
+else if (Model.HasApplied)
+{
+    <div class="alert alert-info">
+        You have already applied to <strong>@Model.Course.Title</strong>.
+    </div>
+    <a asp-page="/Course" asp-route-id="@Model.Id" class="btn btn-secondary">
+        Back to Course
+    </a>
+}
+else
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Course.Title</h5>
+            <p class="card-text">@Model.Course.Description</p>
+            <p><strong>Duration:</strong> @Model.Course.Duration</p>
+        </div>
+    </div>
+
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-primary">
+            Confirm Application
+        </button>
+        <a asp-page="/Course" asp-route-id="@Model.Id" class="btn btn-link">
+            Cancel
+        </a>
+    </form>
+}

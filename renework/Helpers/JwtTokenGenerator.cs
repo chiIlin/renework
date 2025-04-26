@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-
+        
 namespace renework.Helpers
 {
     public class JwtTokenGenerator

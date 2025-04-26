@@ -1,0 +1,57 @@
+﻿@page "/addCourse"
+@model renework.Pages.AddCourseModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Company,Admin")]
+
+<h1 class="my-4">Add New Course</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Input.Title" class="form-label"></label>
+        <input asp-for="Input.Title" class="form-control" />
+        <span asp-validation-for="Input.Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Description" class="form-label"></label>
+        <textarea asp-for="Input.Description" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Input.Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Tags" class="form-label"></label>
+        <input asp-for="Input.Tags"
+               class="form-control"
+               placeholder="tag1, tag2, tag3" />
+        <span asp-validation-for="Input.Tags" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Duration" class="form-label"></label>
+        <input asp-for="Input.Duration"
+               class="form-control"
+               placeholder="hh:mm:ss" />
+        <span asp-validation-for="Input.Duration" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Link" class="form-label"></label>
+        <input asp-for="Input.Link" class="form-control" />
+        <span asp-validation-for="Input.Link" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Status" class="form-label"></label>
+        <select asp-for="Input.Status" class="form-select">
+            <option value="Open">Open</option>
+            <option value="Closed">Closed</option>
+        </select>
+        <span asp-validation-for="Input.Status" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create Course</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

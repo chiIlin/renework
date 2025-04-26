@@ -1,0 +1,32 @@
+﻿@* Pages/Courses.cshtml *@
+@page "/courses"
+@model renework.Pages.CoursesModel
+@using renework.MongoDB.Collections
+
+<h1 class="my-4">All Courses</h1>
+<div class="row">
+    @foreach (var c in Model.Courses)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@c.Title</h5>
+                    <p class="card-text flex-grow-1">
+                        @{
+                            var desc = c.Description.Length > 120
+                            ? c.Description.Substring(0, 120) + "…"
+                            : c.Description;
+                        }
+                        @desc
+                    </p>
+                    <p class="mb-2"><strong>Duration:</strong> @c.Duration</p>
+                    <a asp-page="/course"
+                       asp-route-id="@c.Id"
+                       class="btn btn-primary mt-auto">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

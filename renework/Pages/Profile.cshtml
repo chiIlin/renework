@@ -15,7 +15,6 @@
     var role = Model.UserRole;
 }
 
-
 <h1 class="text-center my-4">@title</h1>
 
 <div class="profile-container">
@@ -29,23 +28,38 @@
 
             <dt class="col-sm-3">First Name</dt>
             <dd class="col-sm-9">
-                @(!string.IsNullOrWhiteSpace(Model.ProfileUser.FirstName)
-                    ? Model.ProfileUser.FirstName
-                    : "<span class='text-muted'>None</span>")
+                @if (!string.IsNullOrWhiteSpace(Model.ProfileUser.FirstName))
+                {
+                    @Model.ProfileUser.FirstName
+                }
+                else
+                {
+                    <span class="text-muted">None</span>
+                }
             </dd>
 
             <dt class="col-sm-3">Surname</dt>
             <dd class="col-sm-9">
-                @(!string.IsNullOrWhiteSpace(Model.ProfileUser.Surname)
-                    ? Model.ProfileUser.Surname
-                    : "<span class='text-muted'>None</span>")
+                @if (!string.IsNullOrWhiteSpace(Model.ProfileUser.Surname))
+                {
+                    @Model.ProfileUser.Surname
+                }
+                else
+                {
+                    <span class="text-muted">None</span>
+                }
             </dd>
 
             <dt class="col-sm-3">Description</dt>
             <dd class="col-sm-9">
-                @(!string.IsNullOrWhiteSpace(Model.ProfileUser.Description)
-                    ? Model.ProfileUser.Description
-                    : "<span class='text-muted'>None</span>")
+                @if (!string.IsNullOrWhiteSpace(Model.ProfileUser.Description))
+                {
+                    @Model.ProfileUser.Description
+                }
+                else
+                {
+                    <span class="text-muted">None</span>
+                }
             </dd>
 
             <dt class="col-sm-3">Skills</dt>
@@ -69,17 +83,22 @@
             {
                 <dt class="col-sm-3">Company</dt>
                 <dd class="col-sm-9">
-                    @(string.IsNullOrWhiteSpace(Model.ProfileUser.CompanyName)
-                        ? "<span class='text-muted'>None</span>"
-                        : Model.ProfileUser.CompanyName)
+                    @if (!string.IsNullOrWhiteSpace(Model.ProfileUser.CompanyName))
+                    {
+                        @Model.ProfileUser.CompanyName
+                    }
+                    else
+                    {
+                        <span class="text-muted">None</span>
+                    }
                 </dd>
             }
         </dl>
     </section>
 
+    <!-- 2) ACCOUNT SETTINGS FOR OWNER -->
     @if (Model.IsOwnProfile)
     {
-        <!-- 2) ACCOUNT SETTINGS FOR OWNER -->
         <section class="profile-section mb-5">
             <h2>Account Settings</h2>
 
@@ -125,7 +144,8 @@
                 <textarea asp-for="DetailsInput.Description" class="form-control mb-2"></textarea>
 
                 <label asp-for="DetailsInput.NewSkill"></label>
-                <input asp-for="DetailsInput.NewSkill" class="form-control mb-2"
+                <input asp-for="DetailsInput.NewSkill"
+                       class="form-control mb-2"
                        placeholder="Add a new skill" />
 
                 <label asp-for="DetailsInput.CompanyName"></label>
@@ -138,11 +158,17 @@
         </section>
     }
 
+    <!-- 3) COMPANY COURSES & ADD COURSE BUTTON -->
     @if ((role == "Company" || role == "Admin") && Model.IsOwnProfile)
     {
-        <!-- 3) COMPANY COURSES -->
         <section class="profile-section mb-5">
             <h2>Manage My Courses</h2>
+
+            <a asp-page="/AddCourse"
+               class="btn btn-success btn-sm mb-3">
+                Add Course
+            </a>
+
             <ul class="list-group">
                 @if (Model.CompanyCourses.Any())
                 {
@@ -166,19 +192,17 @@
                     <li class="list-group-item text-muted">No courses yet</li>
                 }
             </ul>
-            <a asp-page-handler="AddCourse" class="btn btn-primary mt-2">
-                Add New Course
-            </a>
         </section>
     }
 
+    <!-- 4) ADMIN CONTROLS -->
     @if (role == "Admin")
     {
-        <!-- 4) ADMIN CONTROLS -->
         <section class="profile-section mb-5">
             <h2>Admin Controls</h2>
             <a asp-page="/Admin/Users" class="btn btn-dark me-2">Manage Users</a>
             <a asp-page="/Admin/Courses" class="btn btn-dark">Manage Courses</a>
         </section>
     }
+
 </div>

@@ -1,7 +1,10 @@
-﻿using System;
+﻿// Program.cs
+using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -24,6 +27,9 @@ builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<RedisSettings>(
     builder.Configuration.GetSection("RedisSettings"));
+
+// 1.a) JWT Token Generator registration
+builder.Services.AddSingleton<JwtTokenGenerator>();
 
 // 2) MongoDB
 var mongoSettings = builder.Configuration
@@ -52,8 +58,7 @@ builder.Services.AddScoped<IAppliedCourseRepository, AppliedCourseRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
 
-// 5) JWT
-builder.Services.AddSingleton<JwtTokenGenerator>();
+// 5) Authentication
 var jwtSettings = builder.Configuration
     .GetSection("JwtSettings")
     .Get<JwtSettings>();
@@ -62,12 +67,18 @@ var keyBytes = Encoding.UTF8.GetBytes(jwtSettings.Key);
 builder.Services
   .AddAuthentication(options =>
   {
-      options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-      options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+      // Cookies as default for Razor Pages
+      options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+      options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+      options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
   })
-  .AddJwtBearer(options =>
+  .AddCookie(options =>
   {
-      // Token validation parameters to match the token generator
+      options.LoginPath = "/Login";
+      options.AccessDeniedPath = "/Login";
+  })
+  .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+  {
       options.TokenValidationParameters = new TokenValidationParameters
       {
           ValidateIssuer = true,
@@ -79,7 +90,6 @@ builder.Services
           IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
       };
 
-      // Look for token in cookie if no Authorization header
       options.Events = new JwtBearerEvents
       {
           OnMessageReceived = ctx =>
@@ -94,13 +104,14 @@ builder.Services
       };
   });
 
+// 6) Authorization policies
 builder.Services.AddAuthorization(opts =>
 {
     opts.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
     opts.AddPolicy("UserOnly", p => p.RequireRole("User"));
 });
 
-// 6) Redis
+// 7) Redis
 var redisSettings = builder.Configuration
     .GetSection("RedisSettings")
     .Get<RedisSettings>();
@@ -114,7 +125,7 @@ builder.Services.AddStackExchangeRedisCache(opts =>
 builder.Services.AddScoped<renework.Services.ICacheService,
                            renework.Services.RedisCacheService>();
 
-// 7) MVC + Swagger + Razor
+// 8) MVC + Swagger + Razor
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

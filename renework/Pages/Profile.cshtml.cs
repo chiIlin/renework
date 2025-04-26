@@ -12,8 +12,8 @@ using renework.Repositories.Interfaces;
 
 namespace renework.Pages
 {
-    [Authorize]
-    public class ProfileModel : PageModel
+    [Authorize]  // still protect the page at the framework level
+    public class ProfileModel : PageModel   
     {
         private readonly IUserRepository _users;
         private readonly ICourseRepository _courses;
@@ -62,13 +62,13 @@ namespace renework.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            // redirect anonymous users to /Login
+            // explicit redirect if not authenticated
             if (!(User?.Identity?.IsAuthenticated ?? false))
                 return RedirectToPage("/Login");
 
             await InitializeProfileAsync();
 
-            // prefill the edit forms
+            // pre-fill form inputs
             UsernameInput.NewUsername = ProfileUser.Username;
             DetailsInput.FirstName = ProfileUser.FirstName;
             DetailsInput.Surname = ProfileUser.Surname;
