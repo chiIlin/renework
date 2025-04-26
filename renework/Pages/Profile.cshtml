@@ -1,5 +1,4 @@
-﻿@* Pages/Profile.cshtml *@
-@page "/Profile/{username?}"
+﻿@page "/Profile/{username?}"
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @model renework.Pages.ProfileModel
@@ -102,37 +101,25 @@
         <section class="profile-section mb-5">
             <h2>Account Settings</h2>
 
-            <form method="post"
-                  asp-page-handler="ChangeUsername"
-                  asp-route-username="@Model.Username">
+            <form method="post" asp-page-handler="ChangeUsername" asp-route-username="@Model.Username">
                 @Html.AntiForgeryToken()
                 <label asp-for="UsernameInput.NewUsername"></label>
                 <input asp-for="UsernameInput.NewUsername" class="form-control mb-2" />
                 <button class="btn btn-success">Change Username</button>
             </form>
 
-            <form method="post"
-                  asp-page-handler="ChangePassword"
-                  asp-route-username="@Model.Username"
-                  class="mt-4">
+            <form method="post" asp-page-handler="ChangePassword" asp-route-username="@Model.Username" class="mt-4">
                 @Html.AntiForgeryToken()
                 <label asp-for="PasswordInput.CurrentPassword"></label>
-                <input asp-for="PasswordInput.CurrentPassword"
-                       type="password"
-                       class="form-control mb-2" />
+                <input asp-for="PasswordInput.CurrentPassword" type="password" class="form-control mb-2" />
 
                 <label asp-for="PasswordInput.NewPassword"></label>
-                <input asp-for="PasswordInput.NewPassword"
-                       type="password"
-                       class="form-control mb-2" />
+                <input asp-for="PasswordInput.NewPassword" type="password" class="form-control mb-2" />
 
                 <button class="btn btn-success">Change Password</button>
             </form>
 
-            <form method="post"
-                  asp-page-handler="UpdateDetails"
-                  asp-route-username="@Model.Username"
-                  class="mt-4">
+            <form method="post" asp-page-handler="UpdateDetails" asp-route-username="@Model.Username" class="mt-4">
                 @Html.AntiForgeryToken()
                 <label asp-for="DetailsInput.FirstName"></label>
                 <input asp-for="DetailsInput.FirstName" class="form-control mb-2" />
@@ -144,30 +131,24 @@
                 <textarea asp-for="DetailsInput.Description" class="form-control mb-2"></textarea>
 
                 <label asp-for="DetailsInput.NewSkill"></label>
-                <input asp-for="DetailsInput.NewSkill"
-                       class="form-control mb-2"
-                       placeholder="Add a new skill" />
+                <input asp-for="DetailsInput.NewSkill" class="form-control mb-2" placeholder="Add a new skill" />
 
                 <label asp-for="DetailsInput.CompanyName"></label>
-                <input asp-for="DetailsInput.CompanyName"
-                       class="form-control mb-2"
-                       placeholder="Company name (if you’re a Company/Admin)" />
+                <input asp-for="DetailsInput.CompanyName" class="form-control mb-2" placeholder="Company name (if you’re a Company/Admin)" />
 
                 <button class="btn btn-success">Save Profile</button>
             </form>
         </section>
     }
 
-    <!-- 3) COMPANY COURSES & ADD COURSE BUTTON -->
+    <!-- 3) COMPANY COURSES & ACTIONS -->
     @if ((role == "Company" || role == "Admin") && Model.IsOwnProfile)
     {
         <section class="profile-section mb-5">
             <h2>Manage My Courses</h2>
 
-            <a asp-page="/AddCourse"
-               class="btn btn-success btn-sm mb-3">
-                Add Course
-            </a>
+            <a asp-page="/AddCourse" class="btn btn-success btn-sm mb-3">Add Course</a>
+            <a asp-page="/Applications" class="btn btn-primary btn-sm mb-3 ms-2">View Applications</a>
 
             <ul class="list-group">
                 @if (Model.CompanyCourses.Any())
@@ -177,12 +158,8 @@
                         <li class="list-group-item d-flex justify-content-between">
                             @c.Title
                             <span>
-                                <a asp-page-handler="EditCourse"
-                                   asp-route-id="@c.Id"
-                                   class="btn btn-sm btn-warning">Edit</a>
-                                <a asp-page-handler="DeleteCourse"
-                                   asp-route-id="@c.Id"
-                                   class="btn btn-sm btn-danger">Delete</a>
+                                <a asp-page-handler="EditCourse" asp-route-id="@c.Id" class="btn btn-sm btn-warning">Edit</a>
+                                <a asp-page-handler="DeleteCourse" asp-route-id="@c.Id" class="btn btn-sm btn-danger">Delete</a>
                             </span>
                         </li>
                     }

@@ -1,0 +1,65 @@
+﻿@* Pages/Applications.cshtml *@
+@page "/Applications"
+@model renework.Pages.ApplicationsModel
+
+<h1 class="my-4 text-center">Pending Applications</h1>
+
+@if (!Model.PendingApps.Any())
+{
+    <div class="alert alert-info text-center">No pending applications.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Applicant Email</th>
+                <th>Course</th>
+                <th>Submitted</th>
+                <th>CV</th>
+                <th>Letter</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.PendingApps)
+            {
+                <tr>
+                    <td>@item.ApplicantEmail</td>
+                    <td>@item.Course.Title</td>
+                    <td>@item.App.Timestamp.ToLocalTime().ToString("g")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.App.CVFileName))
+                        {
+                            <a href="~/uploads/@item.App.CVFileName" target="_blank">Download</a>
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.App.LetterFileName))
+                        {
+                            <a href="~/uploads/@item.App.LetterFileName" target="_blank">Download</a>
+                        }
+                    </td>
+                    <td>
+                        <form method="post"
+                              asp-page-handler="Approve"
+                              class="d-inline">
+                            <button name="id" value="@item.App.Id"
+                                    class="btn btn-sm btn-success">
+                                Approve
+                            </button>
+                        </form>
+                        <form method="post"
+                              asp-page-handler="Reject"
+                              class="d-inline ms-2">
+                            <button name="id" value="@item.App.Id"
+                                    class="btn btn-sm btn-danger">
+                                Reject
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
