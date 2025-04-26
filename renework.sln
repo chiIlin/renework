@@ -5,6 +5,11 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "renework", "renework\renework.csproj", "{FBEF4C0B-116A-4AB7-8A81-E61C372D3344}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1D26AC9C-4C8B-4013-84BA-00EACD8094E3}"
+	ProjectSection(SolutionItems) = preProject
+		swagger.yaml = swagger.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

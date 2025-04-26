@@ -1,0 +1,608 @@
+openapi: 3.0.3
+info:
+  title: Renework API
+  version: v1
+  description: Course & application platform
+
+servers:
+  - url: https://localhost:5001
+    description: Local dev
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/users/register:
+    post:
+      summary: Register a new user
+      security: [] 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+
+  /api/users/login:
+    post:
+      summary: User login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '200':
+          description: JWT token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: Unauthorized
+
+  /api/users:
+    get:
+      summary: List users (admin only)
+      responses:
+        '200':
+          description: Array of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+
+  /api/users/{id}:
+    get:
+      summary: Get user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a user (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+
+  /api/courses:
+    get:
+      summary: List all courses
+      responses:
+        '200':
+          description: Array of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+    post:
+      summary: Create a new course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '401':
+          description: Unauthorized
+
+  /api/courses/{id}:
+    get:
+      summary: Get course by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Course object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          description: Not Found
+    put:
+      summary: Update an existing course
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+    delete:
+      summary: Delete a course (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+
+  /api/appliedcourses:
+    get:
+      summary: List all applied courses
+      responses:
+        '200':
+          description: Array of applied courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppliedCourse'
+    post:
+      summary: Apply to a course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppliedCourse'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedCourse'
+        '401':
+          description: Unauthorized
+
+  /api/appliedcourses/{id}:
+    get:
+      summary: Get applied course by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: AppliedCourse object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppliedCourse'
+        '404':
+          description: Not Found
+    put:
+      summary: Update an applied course
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppliedCourse'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+    delete:
+      summary: Delete an applied course (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+
+  /api/applications:
+    get:
+      summary: List all applications
+      responses:
+        '200':
+          description: Array of applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Application'
+    post:
+      summary: Create a new application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '401':
+          description: Unauthorized
+
+  /api/applications/{id}:
+    get:
+      summary: Get application by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Application object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '404':
+          description: Not Found
+    put:
+      summary: Update an application
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+    delete:
+      summary: Delete an application (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+
+  /api/coursereviews:
+    get:
+      summary: List all course reviews
+      responses:
+        '200':
+          description: Array of course reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseReview'
+    post:
+      summary: Create a new course review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseReview'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseReview'
+        '401':
+          description: Unauthorized
+
+  /api/coursereviews/{id}:
+    get:
+      summary: Get course review by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CourseReview object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseReview'
+        '404':
+          description: Not Found
+    put:
+      summary: Update a course review
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseReview'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+    delete:
+      summary: Delete a course review (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+
+/components:
+  schemas:
+    RegisterDto:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        role:
+          type: string
+        firstName:
+          type: string
+        surname:
+          type: string
+        companyName:
+          type: string
+          nullable: true
+      required:
+        - username
+        - email
+        - password
+        - role
+
+    LoginDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        firstName:
+          type: string
+        surname:
+          type: string
+        companyName:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        appliedCourses:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - username
+        - email
+        - role
+
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        duration:
+          type: string
+        company:
+          type: string
+        link:
+          type: string
+          format: uri
+        timestamp:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+
+    AppliedCourse:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        courseId:
+          type: string
+        progress:
+          type: number
+        rating:
+          type: number
+        duration:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - courseId
+
+    Application:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        courseId:
+          type: string
+        status:
+          type: string
+        letter:
+          type: string
+        cv:
+          type: string
+          description: Base64-encoded PDF or link
+        submittedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - courseId
+
+    CourseReview:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        courseId:
+          type: string
+        comment:
+          type: string
+        rating:
+          type: integer
+        company:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - courseId
