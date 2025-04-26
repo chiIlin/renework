@@ -1,25 +1,4 @@
-/* Базові налаштування */
-html {
-  font-size: 14px;
-  position: relative;
-  min-height: 100%;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-/* Header */
+/* Базові налаштування хедера */
 .transparent-header {
   position: fixed;
   top: 0;
@@ -28,29 +7,32 @@ body {
   z-index: 1000;
   background-color: transparent;
   padding: 1.5rem 0;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, padding 0.3s ease;
 }
 
 .scrolled-header {
   background-color: rgba(0, 0, 0, 0.8);
+  padding: 0.8rem 0; /* Менший паддінг при скролі */
 }
 
 /* Navbar */
 .navbar-brand {
   display: flex;
   align-items: center;
-  font-size: 1.8rem; /* Більший текст Renework */
+  font-size: 1.8rem;
   font-weight: bold;
   color: white;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-right: 2rem;
   text-decoration: none;
+  gap: 0; /* Прибраний відступ між лого і текстом */
+  margin-left: -10px; /* Зміщення лівіше */
 }
 
 .navbar-brand img {
-  height: 50px; /* Більше лого */
-  margin-right: 10px;
+  height: 50px;
+  margin: 0; /* Прибраний зайвий відступ */
 }
 
 .navbar-nav {
@@ -62,7 +44,7 @@ body {
 .navbar-dark .navbar-nav .nav-link {
   color: rgba(255, 255, 255, 0.95);
   font-weight: 600;
-  font-size: 1.3rem; /* Більший текст для Вхід/Реєстрація */
+  font-size: 1.3rem;
   padding: 0.5rem 1.2rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -73,55 +55,80 @@ body {
   color: #fff;
 }
 
-/* Кнопка "Find Your Job" */
-.cta-button {
-  display: inline-block;
-  padding: 0.85rem 2.5rem;
-  background-color: rgba(214, 162, 67, 0.22); /* Прозорий золотий */
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.6rem; /* Більший текст */
-  border: 2px solid #ffffff; /* Білий бордер */
-  border-radius: 12px; /* Більше заокруглення */
-  text-transform: uppercase;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  letter-spacing: 1px;
-  font-family: 'Arial Narrow', Arial, sans-serif;
-  text-align: center;
+/* Розділювач між Login та Register */
+#register-link::after {
+  content: "|";
+  color: white;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.cta-button:hover {
-  background-color: rgba(214, 162, 67, 0.35); /* Менша прозорість при наведенні */
-  color: #ffffff;
+/* Кнопка бургер-меню */
+.navbar-toggler {
+  border: none;
+  outline: none;
 }
 
-/* Hero section (якщо потрібно) */
-.hero-section {
-  position: relative;
-  height: 100vh;
-  width: 100%;
-  background-image: url('/Assets/Logo.png');
-  background-size: cover;
-  background-position: center;
+/* Адаптивність для планшетів і телефонів */
+@media (max-width: 768px) {
+  .transparent-header {
+    padding: 1rem 0;
+  }
+
+  .navbar-brand {
+    font-size: 1.4rem;
+    margin-right: 1rem;
+    gap: 0; /* Прибраний відступ на мобілках */
+    margin-left: -8px; /* Зменшене зміщення на мобілках */
+  }
+
+  .navbar-brand img {
+    height: 40px;
+    margin: 0;
+  }
+
+  .navbar-nav {
+    margin-left: auto;
+    flex-direction: row; /* Кнопки залишаються в рядок */
+    background: none; /* Прибираємо чорний фон */
+    padding: 0;
+    border-radius: 0;
+    margin-top: 0;
+  }
+
+  .navbar-dark .navbar-nav .nav-link {
+    font-size: 1.1rem;
+    padding: 0.5rem 0.8rem;
+    width: auto;
+    text-align: center;
+  }
+
+  .navbar-toggler {
+    margin-right: 10px;
+  }
 }
 
-.hero-content {
-  position: relative;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
+/* Адаптивність для дуже маленьких телефонів */
+@media (max-width: 480px) {
+  .transparent-header {
+    padding: 0.8rem 0;
+  }
 
-/* Контент */
-.body-content {
-  padding-top: 0;
-  min-height: 100vh;
-}
+  .navbar-brand {
+    font-size: 1.2rem;
+    gap: 0; /* Прибраний відступ на маленьких екранах */
+    margin-left: -5px; /* Ще менше зміщення на дуже маленьких екранах */
+  }
 
-/* Прибрати футер */
-.footer {
-  display: none;
+  .navbar-brand img {
+    height: 35px;
+    margin: 0;
+  }
+
+  .navbar-dark .navbar-nav .nav-link {
+    font-size: 1rem;
+    padding: 0.4rem 0.6rem;
+  }
 }
