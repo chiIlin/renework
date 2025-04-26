@@ -29,5 +29,8 @@ namespace renework.MongoDB.Collections
 
         [BsonElement("timestamp")]
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+
+        [BsonElement("status")]
+        public string Status { get; set; }
     }
 }

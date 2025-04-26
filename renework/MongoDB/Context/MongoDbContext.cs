@@ -13,6 +13,13 @@ namespace renework.MongoDB.Context
             IMongoClient client)
         {
             _db = client.GetDatabase(settings.Value.DatabaseName);
+
+            //unique users
+            var users = Users;
+            var indexModel = new CreateIndexModel<User>(
+                Builders<User>.IndexKeys.Ascending(u => u.Username),
+                new CreateIndexOptions { Unique = true });
+            users.Indexes.CreateOne(indexModel);
         }
 
         public IMongoCollection<User> Users => _db.GetCollection<User>("Users");

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Program.cs
+using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
+using StackExchange.Redis;
 using renework.Helpers;
 using renework.MongoDB.Context;
 using renework.MongoDB.Collections;
@@ -21,29 +23,28 @@ builder.Services.Configure<MongoSettings>(
     builder.Configuration.GetSection("MongoSettings"));
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<RedisSettings>(
+    builder.Configuration.GetSection("RedisSettings"));
 
-// grab a typed copy of MongoSettings so we can use it in registrations
+// 2) MongoDB
 var mongoSettings = builder.Configuration
     .GetSection("MongoSettings")
     .Get<MongoSettings>();
 
-// 2) MongoDB Client & Context
 builder.Services.AddSingleton<IMongoClient>(sp =>
     new MongoClient(mongoSettings.ConnectionString));
-
-// Register our context so we can also pull out collections by property
 builder.Services.AddSingleton<MongoDbContext>();
 
-// 3) Register each IMongoCollection<T> for your repositories
-builder.Services.AddScoped<IMongoCollection<User>>(sp =>
+// 3) Mongo Collections for DI
+builder.Services.AddScoped(sp =>
     sp.GetRequiredService<MongoDbContext>().Users);
-builder.Services.AddScoped<IMongoCollection<Course>>(sp =>
+builder.Services.AddScoped(sp =>
     sp.GetRequiredService<MongoDbContext>().Courses);
-builder.Services.AddScoped<IMongoCollection<AppliedCourse>>(sp =>
+builder.Services.AddScoped(sp =>
     sp.GetRequiredService<MongoDbContext>().AppliedCourses);
-builder.Services.AddScoped<IMongoCollection<Application>>(sp =>
+builder.Services.AddScoped(sp =>
     sp.GetRequiredService<MongoDbContext>().Applications);
-builder.Services.AddScoped<IMongoCollection<CourseReview>>(sp =>
+builder.Services.AddScoped(sp =>
     sp.GetRequiredService<MongoDbContext>().CourseReviews);
 
 // 4) Repositories
@@ -53,10 +54,8 @@ builder.Services.AddScoped<IAppliedCourseRepository, AppliedCourseRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
 
-// 5) JWT generator
+// 5) JWT
 builder.Services.AddSingleton<JwtTokenGenerator>();
-
-// 6) Authentication & Authorization
 var jwtSettings = builder.Configuration
     .GetSection("JwtSettings")
     .Get<JwtSettings>();
@@ -81,14 +80,29 @@ builder.Services
           IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
       };
   });
-
 builder.Services.AddAuthorization(opts =>
 {
     opts.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
     opts.AddPolicy("UserOnly", p => p.RequireRole("User"));
 });
 
-// 7) Controllers & Swagger
+// 6) Redis
+var redisSettings = builder.Configuration
+    .GetSection("RedisSettings")
+    .Get<RedisSettings>();
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
+    ConnectionMultiplexer.Connect(redisSettings.Configuration));
+
+builder.Services.AddStackExchangeRedisCache(opts =>
+{
+    opts.Configuration = redisSettings.Configuration;
+    opts.InstanceName = redisSettings.InstanceName;
+});
+builder.Services.AddScoped<renework.Services.ICacheService,
+                           renework.Services.RedisCacheService>();
+
+// 7) MVC + Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -100,7 +114,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Course & application platform"
     });
 
-    // XML comments (enable <GenerateDocumentationFile>true</GenerateDocumentationFile> in .csproj)
+    // XML docs
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
@@ -113,7 +127,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter: Bearer {your token}"
+        Description = "Enter: Bearer {token}"
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement {
         {
@@ -129,12 +143,10 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
+    app.UseSwaggerUI(c => {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Renework API v1");
         c.RoutePrefix = string.Empty;
     });

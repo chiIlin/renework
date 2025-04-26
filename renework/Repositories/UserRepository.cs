@@ -18,6 +18,8 @@ namespace renework.Repositories
         public async Task<User> GetByIdAsync(string id) =>
             await _users.Find(u => u.Id == id).FirstOrDefaultAsync();
 
+        public async Task<User> GetByUsernameAsync(string username) =>
+            await _users.Find(u => u.Username == username).FirstOrDefaultAsync();
         public async Task<User> GetByEmailAsync(string email) =>
             await _users.Find(u => u.Email == email).FirstOrDefaultAsync();
 
