@@ -151,7 +151,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Renework API v1");
-        c.RoutePrefix = string.Empty;
+        c.RoutePrefix = "swagger";
     });
 }
 
@@ -159,6 +159,12 @@ app.UseStaticFiles(); // Цей рядок має бути обов'язково
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapGet("/index.html", context =>
+{
+    context.Response.Redirect("/", permanent: false);
+    return System.Threading.Tasks.Task.CompletedTask;
+});
+
 app.MapControllers();
 app.MapRazorPages();
 app.Run();

@@ -1,0 +1,69 @@
+@page
+@model renework.Pages.ProfileModel
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/profile.css" />
+}
+
+<div class="profile-container">
+    <h1>User Profile</h1>
+
+    <!-- Section to update user details -->
+    <div class="profile-section">
+        <h2>Update Profile</h2>
+        <form id="update-profile-form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" class="form-control" value="John Doe" required />
+            </div>
+            <div class="form-group">
+                <label for="password">New Password</label>
+                <input type="password" id="password" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+
+    <!-- Section to display user's courses -->
+    <div class="profile-section">
+        <h2>My Courses</h2>
+        <ul class="course-list">
+            <li>Course 1 - Progress: 50%</li>
+            <li>Course 2 - Progress: 80%</li>
+            <li>Course 3 - Progress: 100%</li>
+        </ul>
+    </div>
+
+    <!-- Section to manage courses -->
+    <div class="profile-section">
+        <h2>Manage Courses</h2>
+        <table class="course-table">
+            <thead>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Course 1</td>
+                    <td>
+                        <button class="btn btn-edit">Edit</button>
+                        <button class="btn btn-delete">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Course 2</td>
+                    <td>
+                        <button class="btn btn-edit">Edit</button>
+                        <button class="btn btn-delete">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-add">Add New Course</button>
+    </div>
+</div>
