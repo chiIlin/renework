@@ -1,81 +1,252 @@
-.login-container {
-    max-width: 450px;
-    margin: 80px auto;
-}
-
-.login-card {
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.login-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-}
-
-.login-header {
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
-
-.login-header h3 {
+body {
     margin: 0;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../Assets/LandscapeNoText_auth.png');
+    background-size: cover;
+    background-position: center;
 }
 
-.login-body {
-    padding: 30px;
-    background-color: #fff;
+.login-page {
+    display: flex;
+    width: 800px; /* Reduced from 1003px to about 80% for better fit on 1920x1080 */
+    height: 550px; /* Reduced from 689px to about 80% for better fit on 1920x1080 */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
 }
 
-.form-group label {
+/* Gold divider line between sections */
+.login-page:before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    left: 50%;
+    width: 1px;
+    background-color: #D6A243;
+    z-index: 10;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    padding: 20px 42px 15px 42px; /* Push everything up a bit */
+    box-sizing: border-box;
+    background-color: #000000;
+    color: white;
+    align-items: center;
+    justify-content: space-between; /* Зберігаємо для розташування блоків */
+    position: relative;
+    height: 100%;
+    /* Видаляємо зайвий padding-bottom */
+}
+
+.login-container-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    /* Видаляємо flex: 1 1 auto; щоб не розтягувалось */
+    justify-content: flex-start;
+}
+
+.logo-section {
+    display: flex;
+    flex-direction: column; /* Logo above text */
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.logo {
+    height: 50px; /* Reduced from 60px */
+    margin-bottom: 5px; /* Reduced space between logo and text */
+}
+
+.brand-name {
+    font-family: 'Teko', sans-serif;
+    font-size: 40px;
     font-weight: 500;
-    margin-bottom: 8px;
-    color: #495057;
+    color: #FFFFFF;
+    margin: 0;
 }
 
-.form-control:focus {
-    border-color: #a777e3;
-    box-shadow: 0 0 0 0.25rem rgba(167, 119, 227, 0.25);
+.login-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 48px;
+    font-weight: 500;
+    color: #28577D;
+    margin: 0 0 8px 0; /* Less space under the title */
+}
+
+.login-form {
+    width: 100%;
+    max-width: 100%;
+}
+
+.form-group {
+    margin-bottom: 10px; /* Reduced from 15px */
+}
+
+.form-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #FFFFFF;
+    display: block;
+    margin-bottom: 3px; /* Reduced from 5px */
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 35px;
 }
 
 .login-btn {
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
-    border: none;
-    font-weight: 500;
-    padding: 12px;
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #FFFFFF;
+    background-color: #000000;
+    color: #FEFEFE;
+    border-radius: 4px;
+    font-family: 'Teko', sans-serif;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 40px;
     margin-top: 10px;
-    transition: all 0.3s;
 }
 
 .login-btn:hover {
-    background: linear-gradient(135deg, #5a7dfa, #9b68db);
-    transform: translateY(-2px);
+    background-color: #333333;
 }
 
-.login-btn:active {
-    transform: translateY(0);
+.separator {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    margin: 5px 0; /* Зменшено з 15px */
+}
+
+.separator:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.separator span {
+    font-family: 'Teko', sans-serif;
+    font-size: 36px; /* Make "OR" smaller */
+    color: #D6A243;
+    background-color: #000;
+    position: relative;
+    padding: 0 15px;
+}
+
+.google-btn {
+    width: 100%;
+    padding: 0;
+    border: none; /* Remove border */
+    background-color: transparent;
+    color: #FFFFFF;
+    border-radius: 4px;
+    font-family: 'Teko', sans-serif;
+    font-size: 28px; /* Slightly smaller text */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 40px;
+    margin-top: 5px; /* Піднімаємо кнопку */
+    margin-bottom: 0; /* Видаляємо зайвий відступ */
+}
+
+.google-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .login-links {
-    margin-top: 25px;
-    text-align: center;
-    color: #6c757d;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px; /* Піднімаємо нижні посилання */
+    margin-bottom: 0;
+    padding: 0 2px;
+    position: static; /* замість relative */
+    bottom: auto; /* прибираємо фіксацію знизу */
 }
 
-.login-links a {
-    color: #a777e3;
+.create-account, .forgot-password {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #D6A243;
+}
+
+.create-account a, .forgot-password a {
+    color: #D6A243;
     text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
 }
 
-.login-links a:hover {
-    color: #6e8efb;
+.create-account a:hover, .forgot-password a:hover {
     text-decoration: underline;
+}
+
+.auth-image {
+    width: 50%;
+    background-color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 42px;
+}
+
+.auth-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+    .login-page {
+        width: 90%;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-page {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+    }
+    
+    .login-page:before {
+        display: none;
+    }
+    
+    .login-container {
+        width: 100%;
+        padding: 25px 20px 42px 20px;
+    }
+    
+    .auth-image {
+        width: 100%;
+        height: 250px;
+        padding: 20px;
+    }
 }
