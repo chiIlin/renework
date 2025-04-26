@@ -3,8 +3,20 @@
 @{
     ViewData["Title"] = "Home page";
 }
+@section HomeStyles {
+    <link rel="stylesheet" href="~/css/index.css" />
+}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="cta-container">
+    <a href="#" class="cta-button">Find YOUR JOB</a>
 </div>
+
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" />
+}

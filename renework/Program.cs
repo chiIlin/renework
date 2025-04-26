@@ -1,4 +1,5 @@
-﻿// Program.cs
+﻿
+// Program.cs
 using System;
 using System.IO;
 using System.Reflection;
@@ -141,6 +142,7 @@ builder.Services.AddSwaggerGen(c =>
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+
 
     // JWT in Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
