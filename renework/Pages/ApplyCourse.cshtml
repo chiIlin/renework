@@ -3,38 +3,50 @@
 @model renework.Pages.ApplyCourseModel
 @using renework.MongoDB.Collections
 
-<h1 class="my-4">Apply for Course</h1>
+<h1 class="my-4">Apply for @Model.Course.Title</h1>
 
-@if (Model.Course is null)
-{
-    <div class="alert alert-danger">Course not found.</div>
-}
-else if (Model.HasApplied)
+@if (Model.HasApplied)
 {
     <div class="alert alert-info">
-        You have already applied to <strong>@Model.Course.Title</strong>.
+        You already have an application pending for this course.
     </div>
-    <a asp-page="/Course" asp-route-id="@Model.Id" class="btn btn-secondary">
-        Back to Course
-    </a>
+    <a asp-page="/Course" asp-route-id="@Model.Id" class="btn btn-secondary">Back to Course</a>
 }
 else
 {
+    <!-- Course Preview -->
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">@Model.Course.Title</h5>
             <p class="card-text">@Model.Course.Description</p>
+            <p><strong>Tags:</strong> @string.Join(", ", Model.Course.Tags)</p>
             <p><strong>Duration:</strong> @Model.Course.Duration</p>
+            <p><strong>Posted:</strong> @Model.Course.Timestamp.ToLocalTime().ToString("g")</p>
+            <p><a href="@Model.Course.Link" target="_blank">Course Link</a></p>
         </div>
     </div>
 
-    <form method="post">
+    <!-- Application Form -->
+    <form method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
-        <button type="submit" class="btn btn-primary">
-            Confirm Application
-        </button>
-        <a asp-page="/Course" asp-route-id="@Model.Id" class="btn btn-link">
-            Cancel
-        </a>
+
+        <div class="mb-3">
+            <label asp-for="CV" class="form-label">Upload CV (PDF)<span class="text-danger">*</span></label>
+            <input asp-for="CV" type="file" accept=".pdf" class="form-control" required />
+            <span asp-validation-for="CV" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Letter" class="form-label">Upload Cover Letter (PDF)</label>
+            <input asp-for="Letter" type="file" accept=".pdf" class="form-control" />
+            <span asp-validation-for="Letter" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Application</button>
+        <a asp-page="/Course" asp-route-id="@Model.Id" class="btn btn-link">Cancel</a>
     </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

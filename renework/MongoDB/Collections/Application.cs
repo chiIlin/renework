@@ -1,4 +1,6 @@
-﻿using MongoDB.Bson;
+﻿// renework/MongoDB/Collections/Application.cs
+using System;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace renework.MongoDB.Collections
@@ -6,26 +8,24 @@ namespace renework.MongoDB.Collections
     public class Application
     {
         [BsonId, BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
-        [BsonElement("userId"), BsonRepresentation(BsonType.ObjectId)]
-        public string UserId { get; set; }
+        public string Id { get; set; } = "";
 
         [BsonElement("courseId"), BsonRepresentation(BsonType.ObjectId)]
-        public string CourseId { get; set; }
+        public string CourseId { get; set; } = "";
 
+        [BsonElement("userId"), BsonRepresentation(BsonType.ObjectId)]
+        public string UserId { get; set; } = "";
+
+        [BsonElement("timestamp")]
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+            
         [BsonElement("status")]
-        public string Status { get; set; }
+        public string Status { get; set; } = "Pending";
 
-        [BsonElement("letter")]
-        public string Letter { get; set; }
+        [BsonElement("cvFileName")]
+        public string CVFileName { get; set; } = "";
 
-        // if you really want to embed the PDF, use byte[] + GridFS in production;
-        // or store a URL/path here instead of raw bytes.
-        [BsonElement("cv")]
-        public byte[] Cv { get; set; }
-
-        [BsonElement("submittedAt")]
-        public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
+        [BsonElement("letterFileName")]
+        public string LetterFileName { get; set; } = "";
     }
 }
