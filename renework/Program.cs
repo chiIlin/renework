@@ -143,6 +143,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseStaticFiles(); // Цей рядок має бути обов'язково!
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
