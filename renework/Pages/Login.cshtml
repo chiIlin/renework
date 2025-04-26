@@ -1,0 +1,73 @@
+@page
+@model renework.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css" />
+}
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h3>Login to Your Account</h3>
+        </div>
+        <div class="login-body">
+            <div class="alert alert-danger" id="error-message" style="display: none;"></div>
+            <form id="login-form">
+                <div class="form-group mb-3">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary login-btn">Sign In</button>
+                </div>
+            </form>
+            <div class="login-links">
+                Don't have an account? <a href="/Register">Create One</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            try {
+                const response = await fetch('/api/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    // Store token in localStorage
+                    localStorage.setItem('jwt_token', data.token);
+                    // Redirect to home page after successful login
+                    window.location.href = '/';
+                } else {
+                    errorMessage.textContent = 'Invalid email or password';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.style.display = 'block';
+                console.error('Error:', error);
+            }
+        });
+    </script>
+}

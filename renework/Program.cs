@@ -61,6 +61,7 @@ var jwtSettings = builder.Configuration
     .Get<JwtSettings>();
 var keyBytes = Encoding.UTF8.GetBytes(jwtSettings.Key);
 
+
 builder.Services
   .AddAuthentication(options =>
   {
@@ -141,6 +142,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddRazorPages();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -152,7 +155,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseStaticFiles(); // Цей рядок має бути обов'язково!
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapRazorPages();
 app.Run();
