@@ -52,7 +52,7 @@ builder.Services.AddScoped(sp =>
 builder.Services.AddScoped(sp =>
     sp.GetRequiredService<MongoDbContext>().CourseReviews);
 builder.Services.AddScoped<IBusinessDataRepository, BusinessDataRepository>();
-builder.Services.AddScoped(sp => sp.GetRequiredService<MongoDbContext>().BusinessDatas);
+builder.Services.AddScoped(sp => sp.GetRequiredService<MongoDbContext>().BusinessData);
 
 
 // 4) Repositories
