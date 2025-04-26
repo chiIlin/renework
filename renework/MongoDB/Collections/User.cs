@@ -6,6 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace renework.MongoDB.Collections
 {
     // Ignore any extra fields in stored documents
+    [BsonIgnoreExtraElements]
     public class User
     {
         [BsonId, BsonRepresentation(BsonType.ObjectId)]
@@ -42,7 +43,11 @@ namespace renework.MongoDB.Collections
         [BsonElement("appliedCourses")]
         public List<string> AppliedCourses { get; set; } = new();
 
+        [BsonElement("businessId"), BsonRepresentation(BsonType.ObjectId)]
+        public string? BusinessId { get; set; } 
+
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
+    

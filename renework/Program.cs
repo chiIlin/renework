@@ -1,5 +1,4 @@
-﻿// Program.cs
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -30,7 +29,6 @@ builder.Services.Configure<RedisSettings>(
 var mongoSettings = builder.Configuration
     .GetSection("MongoSettings")
     .Get<MongoSettings>();
-
 builder.Services.AddSingleton<IMongoClient>(sp =>
     new MongoClient(mongoSettings.ConnectionString));
 builder.Services.AddSingleton<MongoDbContext>();
@@ -61,7 +59,6 @@ var jwtSettings = builder.Configuration
     .Get<JwtSettings>();
 var keyBytes = Encoding.UTF8.GetBytes(jwtSettings.Key);
 
-
 builder.Services
   .AddAuthentication(options =>
   {
@@ -70,6 +67,7 @@ builder.Services
   })
   .AddJwtBearer(options =>
   {
+      // Token validation parameters to match the token generator
       options.TokenValidationParameters = new TokenValidationParameters
       {
           ValidateIssuer = true,
@@ -80,7 +78,22 @@ builder.Services
           ValidAudience = jwtSettings.Audience,
           IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
       };
+
+      // Look for token in cookie if no Authorization header
+      options.Events = new JwtBearerEvents
+      {
+          OnMessageReceived = ctx =>
+          {
+              if (string.IsNullOrEmpty(ctx.Request.Headers["Authorization"]) &&
+                  ctx.Request.Cookies.ContainsKey("jwt_token"))
+              {
+                  ctx.Token = ctx.Request.Cookies["jwt_token"];
+              }
+              return Task.CompletedTask;
+          }
+      };
   });
+
 builder.Services.AddAuthorization(opts =>
 {
     opts.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
@@ -91,10 +104,8 @@ builder.Services.AddAuthorization(opts =>
 var redisSettings = builder.Configuration
     .GetSection("RedisSettings")
     .Get<RedisSettings>();
-
 builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
     ConnectionMultiplexer.Connect(redisSettings.Configuration));
-
 builder.Services.AddStackExchangeRedisCache(opts =>
 {
     opts.Configuration = redisSettings.Configuration;
@@ -103,7 +114,7 @@ builder.Services.AddStackExchangeRedisCache(opts =>
 builder.Services.AddScoped<renework.Services.ICacheService,
                            renework.Services.RedisCacheService>();
 
-// 7) MVC + Swagger
+// 7) MVC + Swagger + Razor
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -115,7 +126,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Course & application platform"
     });
 
-    // XML docs
+    // XML comments
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
@@ -134,7 +145,8 @@ builder.Services.AddSwaggerGen(c =>
         {
             new OpenApiSecurityScheme {
                 Reference = new OpenApiReference {
-                    Type = ReferenceType.SecurityScheme, Id = "Bearer"
+                    Type = ReferenceType.SecurityScheme,
+                    Id   = "Bearer"
                 }
             },
             Array.Empty<string>()
@@ -146,26 +158,32 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+// Swagger UI at /swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => {
+    app.UseSwaggerUI(c =>
+    {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Renework API v1");
         c.RoutePrefix = "swagger";
     });
 }
 
+// Static files
 app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Redirect /index.html → /
 app.MapGet("/index.html", context =>
 {
     context.Response.Redirect("/", permanent: false);
-    return System.Threading.Tasks.Task.CompletedTask;
+    return Task.CompletedTask;
 });
+
+// Map endpoints
 app.MapControllers();
 app.MapRazorPages();
 

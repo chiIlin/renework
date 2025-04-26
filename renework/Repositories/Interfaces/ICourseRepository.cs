@@ -12,5 +12,6 @@ namespace renework.Repositories.Interfaces
         Task CreateAsync(Course course);
         Task UpdateAsync(string id, Course courseIn);
         Task RemoveAsync(string id);
+            
     }
 }

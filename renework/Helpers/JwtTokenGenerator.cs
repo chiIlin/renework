@@ -37,7 +37,7 @@ namespace renework.Helpers
                 issuer: _settings.Issuer,
                 audience: _settings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_settings.DurationInMinutes),
+                expires: DateTime.UtcNow.AddMinutes(120),
                 signingCredentials: creds
             );
 
