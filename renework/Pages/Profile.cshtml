@@ -138,18 +138,68 @@
 
                 <button class="btn btn-success">Save Profile</button>
             </form>
+
+            @* BUSINESS MAINTENANCE FOR BUSINESS ROLE *@
+            @if (Model.UserRole == "Business" || Model.UserRole == "Admin")
+            {
+                <section class="profile-section mt-4">
+                    <h2>Business Profile</h2>
+                    <form method="post" asp-page-handler="UpdateBusiness">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label asp-for="BusinessInput.City" class="form-label"></label>
+                            <input asp-for="BusinessInput.City" class="form-control" />
+                            <span asp-validation-for="BusinessInput.City" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="BusinessInput.Region" class="form-label"></label>
+                            <input asp-for="BusinessInput.Region" class="form-control" />
+                            <span asp-validation-for="BusinessInput.Region" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="BusinessInput.Address" class="form-label"></label>
+                            <input asp-for="BusinessInput.Address" class="form-control" />
+                            <span asp-validation-for="BusinessInput.Address" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="BusinessInput.AreaSqm" class="form-label"></label>
+                            <input asp-for="BusinessInput.AreaSqm" type="number" step="0.01" class="form-control" />
+                            <span asp-validation-for="BusinessInput.AreaSqm" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="BusinessInput.MonthlyRevenue" class="form-label"></label>
+                            <input asp-for="BusinessInput.MonthlyRevenue" type="number" step="0.01" class="form-control" />
+                            <span asp-validation-for="BusinessInput.MonthlyRevenue" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="BusinessInput.Budget" class="form-label"></label>
+                            <input asp-for="BusinessInput.Budget" type="number" step="0.01" class="form-control" />
+                            <span asp-validation-for="BusinessInput.Budget" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="BusinessInput.Description" class="form-label"></label>
+                            <textarea asp-for="BusinessInput.Description" class="form-control"></textarea>
+                            <span asp-validation-for="BusinessInput.Description" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="BusinessInput.DowntimeMonths" class="form-label"></label>
+                            <input asp-for="BusinessInput.DowntimeMonths" type="number" class="form-control" />
+                            <span asp-validation-for="BusinessInput.DowntimeMonths" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-success">Save Business Data</button>
+                    </form>
+                </section>
+            }
         </section>
     }
 
-    <!-- 3) COMPANY COURSES & ACTIONS -->
+    <!-- 3) COMPANY COURSES & ADD COURSE + APPLICATIONS -->
     @if ((role == "Company" || role == "Admin") && Model.IsOwnProfile)
     {
         <section class="profile-section mb-5">
             <h2>Manage My Courses</h2>
-
             <a asp-page="/AddCourse" class="btn btn-success btn-sm mb-3">Add Course</a>
             <a asp-page="/Applications" class="btn btn-primary btn-sm mb-3 ms-2">View Applications</a>
-
             <ul class="list-group">
                 @if (Model.CompanyCourses.Any())
                 {
@@ -183,3 +233,7 @@
     }
 
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

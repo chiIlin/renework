@@ -27,5 +27,6 @@ namespace renework.MongoDB.Context
         public IMongoCollection<AppliedCourse> AppliedCourses => _db.GetCollection<AppliedCourse>("AppliedCourses");
         public IMongoCollection<Application> Applications => _db.GetCollection<Application>("Applications");
         public IMongoCollection<CourseReview> CourseReviews => _db.GetCollection<CourseReview>("CourseReviews");
+        public IMongoCollection<BusinessData> BusinessData => _db.GetCollection<BusinessData>("BusinessData");
     }
 }

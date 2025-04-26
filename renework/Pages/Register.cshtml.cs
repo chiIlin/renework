@@ -10,28 +10,19 @@ namespace renework.Pages
     public class RegisterModel : PageModel
     {
         private readonly IUserRepository _users;
-
-        public RegisterModel(IUserRepository users)
-        {
-            _users = users;
-        }
+        public RegisterModel(IUserRepository users) => _users = users;
 
         [BindProperty]
         public RegisterDto Input { get; set; }
 
         public string ErrorMessage { get; set; }
 
-        public void OnGet()
-        {
-            // no logic on GET
-        }
+        public void OnGet() { }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-                return Page();
+            if (!ModelState.IsValid) return Page();
 
-            // check unique email and username
             if (await _users.GetByEmailAsync(Input.Email) != null)
             {
                 ErrorMessage = "Email already in use.";
@@ -48,11 +39,15 @@ namespace renework.Pages
                 Username = Input.Username,
                 Email = Input.Email,
                 HashedPassword = BCrypt.Net.BCrypt.HashPassword(Input.Password),
-                Role = "User"
+                Role = Input.SelectedRole switch
+                {
+                    "business" => "Business",
+                    "company" => "Company",
+                    _ => "User"
+                }
             };
 
             await _users.CreateAsync(user);
-
             return RedirectToPage("/Login", new { registered = true });
         }
     }
