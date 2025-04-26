@@ -1,0 +1,107 @@
+.profile-container {
+    max-width: 800px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
+}
+
+h1, h2 {
+    color: #185a9d;
+    text-align: center;
+}
+
+.profile-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #43cea2;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3cb990;
+}
+
+.course-list {
+    list-style: none;
+    padding: 0;
+}
+
+.course-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.course-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.course-table th, .course-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.course-table th {
+    background-color: #185a9d;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #6e8efb;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #5a7dfa;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+.btn-add {
+    background-color: #43cea2;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn-add:hover {
+    background-color: #3cb990;
+}
