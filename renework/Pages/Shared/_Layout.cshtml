@@ -7,8 +7,132 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/renework.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     @await RenderSectionAsync("HomeStyles", required: false)
     @await RenderSectionAsync("Styles", required: false)
+    
+    <style>
+   /* Загальне налаштування для body, щоб футер був внизу */
+html, body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.body-content {
+  flex: 1 0 auto;
+}
+
+/* Стилі для футера */
+.footer {
+  flex-shrink: 0;
+  position: relative !important;
+  width: 100% !important;
+  background-color: #000 !important;
+  color: #f5d76e !important;
+  padding: 8px 0 !important;
+  margin-top: auto;
+}
+
+.footer-container {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+/* Лівий блок з посиланнями - максимально вліво */
+.footer-links {
+  display: flex !important;
+  gap: 30px !important;
+  justify-content: flex-start !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  flex: 1 !important;
+}
+
+/* Центральний блок з текстом - по центру */
+.footer-text {
+  text-align: center !important;
+  margin: 0 !important;
+  color: #f5d76e !important;
+  flex: 1 !important;
+}
+
+/* Правий блок з іконками - максимально вправо */
+.footer-socials {
+  display: flex !important;
+  gap: 20px !important;
+  justify-content: flex-end !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+  flex: 1 !important;
+}
+
+.footer-link {
+  color: #f5d76e !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: color 0.2s ease !important;
+}
+
+.footer-link:hover {
+  color: #fff !important;
+}
+
+.social-icon {
+  color: #f5d76e !important;
+  font-size: 20px !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease !important;
+}
+
+.social-icon:hover {
+  color: #fff !important;
+}
+
+/* Адаптивність футера */
+@@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column !important;
+    gap: 10px !important;
+    text-align: center !important;
+    padding: 5px 15px !important;
+  }
+  
+  .footer-links {
+    justify-content: center !important;
+    gap: 20px !important;
+    flex: unset !important;
+  }
+  
+  .footer-text {
+    flex: unset !important;
+  }
+  
+  .footer-socials {
+    justify-content: center !important;
+    flex: unset !important;
+  }
+}
+
+@@media (max-width: 480px) {
+  .footer-links {
+    flex-direction: column !important;
+    gap: 5px !important;
+  }
+  
+  .footer {
+    padding: 10px 0 !important;
+  }
+}
+    </style>
 </head>
 <body>
     <header class="transparent-header">
@@ -46,7 +170,23 @@
         @RenderBody()
     </div>
 
-    <!-- Footer removed as requested -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Contact Us</a>
+            </div>
+            <div class="footer-text">
+                © 2025 Renework. All rights reserved.
+            </div>
+            <div class="footer-socials">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -54,17 +194,60 @@
 
     <!-- Add script for header scroll effect -->
     <script>
-  window.addEventListener('scroll', function() {
-    const header = document.querySelector('.transparent-header');
-    if (window.scrollY > 50) {
-      header.classList.add('scrolled-header');
-    } else {
-      header.classList.remove('scrolled-header');
-    }
-  });
+      window.addEventListener('scroll', function() {
+        const header = document.querySelector('.transparent-header');
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled-header');
+        } else {
+          header.classList.remove('scrolled-header');
+        }
+      });
+    </script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Функція для позиціонування футера
+        function positionFooter() {
+            const footer = document.querySelector('.footer');
+            const body = document.body;
+            const html = document.documentElement;
+            
+            // Обчислюємо повну висоту документа
+            const height = Math.max(
+                body.scrollHeight, body.offsetHeight,
+                html.clientHeight, html.scrollHeight, html.offsetHeight
+            );
+            
+            // Якщо документ менший за висоту вікна, прикріплюємо футер внизу
+            if (height <= window.innerHeight) {
+                footer.style.position = 'fixed';
+                footer.style.bottom = '0';
+                footer.style.width = '100%';
+                console.log('Footer fixed at bottom');
+            } else {
+                // Інакше дозволяємо йому розташовуватись природньо
+                footer.style.position = 'static';
+                console.log('Footer positioned normally');
+            }
+        }
+
+        // Викликаємо функцію при завантаженні та зміні розміру вікна
+        positionFooter();
+        window.addEventListener('resize', positionFooter);
+        
+        // Також додаємо console.log для дебагу
+        console.log('Footer script loaded');
+        
+        // Виводимо інформацію про розміри
+        const footer = document.querySelector('.footer');
+        if (footer) {
+            console.log('Footer found, dimensions:', footer.getBoundingClientRect());
+        } else {
+            console.log('Footer not found!');
+        }
+    });
 </script>
-
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
