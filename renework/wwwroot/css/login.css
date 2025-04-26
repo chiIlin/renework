@@ -220,6 +220,23 @@ body {
     border-radius: 8px;
 }
 
+.back-arrow {
+    position: absolute;
+    top: 5px; /* Відступ зверху */
+    left: 20px; /* Відступ зліва */
+    font-size: 36px; /* Розмір стрілки */
+    font-family: Arial, sans-serif;
+    color: #FFFFFF;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, color 0.15s ease; /* Швидкий трігер */
+}
+
+.back-arrow:hover {
+    transform: scale(1.1); /* Менше збільшення */
+    color: #D6A243; /* Зміна кольору при наведенні */
+}
+
 /* Responsive adjustments */
 @media (max-width: 1100px) {
     .login-page {
