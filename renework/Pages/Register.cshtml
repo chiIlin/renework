@@ -14,64 +14,40 @@
             <h3>Create Your Account</h3>
         </div>
         <div class="register-body">
-            <div class="alert alert-danger" id="error-message" style="display: none;"></div>
-            <form id="register-form">
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger">@Model.ErrorMessage</div>
+            }
+
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
                 <div class="form-group mb-3">
-                    <label for="name">Full Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
+                    <label asp-for="Input.Username"></label>
+                    <input asp-for="Input.Username" class="form-control" />
+                    <span asp-validation-for="Input.Username" class="text-danger"></span>
                 </div>
+
                 <div class="form-group mb-3">
-                    <label for="email">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
+
                 <div class="form-group mb-3">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" type="password" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
+
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary register-btn">Create Account</button>
                 </div>
             </form>
-            <div class="register-links">
-                Already have an account? <a href="/Login">Sign In</a>
+
+            <div class="register-links mt-3">
+                Already have an account? <a asp-page="/Login">Sign In</a>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        document.getElementById('register-form').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const role = document.getElementById('role').value;
-            const errorMessage = document.getElementById('error-message');
-            
-            try {
-                const response = await fetch('/api/users/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name, email, password, role })
-                });
-                
-                if (response.ok) {
-                    // Redirect to login page after successful registration
-                    window.location.href = '/Login?registered=true';
-                } else {
-                    const errorData = await response.json();
-                    errorMessage.textContent = errorData || 'Registration failed';
-                    errorMessage.style.display = 'block';
-                }
-            } catch (error) {
-                errorMessage.textContent = 'An error occurred. Please try again.';
-                errorMessage.style.display = 'block';
-                console.error('Error:', error);
-            }
-        });
-    </script>
-}
