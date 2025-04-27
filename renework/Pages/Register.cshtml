@@ -17,7 +17,7 @@
 </head>
 <body>
     <a href="/" class="back-arrow" aria-label="Back to Home">&larr;</a>
-    <div class="login-page register-page"><!-- Використовуємо ті ж стилі, змінюємо лише назву -->
+    <div class="login-page register-page">
         <div class="login-container register-container">
             <div class="login-container-top register-container-top">
                 <div class="logo-section">
@@ -46,7 +46,6 @@
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
 
-                    <!-- Keep a hidden input so the three buttons above the image can still set the account type -->
                     <input asp-for="Input.SelectedRole" type="hidden" value="user" />
 
                     <div class="form-actions">
@@ -98,37 +97,31 @@
 
             buttons.forEach(btn => {
                 const img = btn.querySelector('.account-icon');
-                // *** Переконайтесь, що шлях тут правильний після перейменування ***
                 const whiteIcon = img.getAttribute('data-icon-white');
 
-                btn.classList.remove('active'); // Remove active class from all
-                if (whiteIcon) { // Перевірка, чи атрибут існує
-                     img.src = whiteIcon; // Set all icons to white initially
+                btn.classList.remove('active');
+                if (whiteIcon) {
+                     img.src = whiteIcon;
                 }
             });
 
-            // Activate the clicked button
             clickedButton.classList.add('active');
             const img = clickedButton.querySelector('.account-icon');
-             // *** Переконайтесь, що шлях тут правильний після перейменування ***
             const blackIcon = img.getAttribute('data-icon-black');
-             if (blackIcon) { // Перевірка, чи атрибут існує
-                img.src = blackIcon; // Set clicked button's icon to black
+             if (blackIcon) {
+                img.src = blackIcon;
              }
 
-            // Update the hidden input value
             document.querySelector('input[name="Input.SelectedRole"]').value = selectedRole;
         }
 
-        // Ensure the default selection is visually correct on page load
         document.addEventListener('DOMContentLoaded', function() {
             const defaultActiveButton = document.querySelector('.account-type-btn.active');
             if (defaultActiveButton) {
                 const img = defaultActiveButton.querySelector('.account-icon');
-                // *** Переконайтесь, що шлях тут правильний після перейменування ***
                 const blackIcon = img.getAttribute('data-icon-black');
-                 if (blackIcon) { // Перевірка, чи атрибут існує
-                    img.src = blackIcon; // Ensure the default active button shows the black icon
+                 if (blackIcon) {
+                    img.src = blackIcon;
                  }
             }
         });

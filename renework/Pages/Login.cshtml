@@ -28,7 +28,6 @@
                 <h2 class="login-title">LOGIN</h2>
 
                 <form method="post" class="login-form">
-                    @* Preserve the ReturnUrl query parameter *@
                     <input type="hidden" asp-for="ReturnUrl" />
 
                     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
