@@ -771,3 +771,9 @@ body {
         max-width: 100vw !important;
     }
 }
+
+/* Ensure the User icon stays the same size */
+.account-type-btn[data-role="user"] .account-icon {
+    width: 40px !important;
+    height: 40px !important;
+}
