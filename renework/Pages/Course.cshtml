@@ -2,56 +2,59 @@
 @model renework.Pages.CourseModel
 @using renework.MongoDB.Collections
 
-@if (Model.Course == null)
-{
-    <div class="alert alert-danger">Course not found.</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/course.css" />
 }
-else
-{
-    <h1 class="text-center my-4">@Model.Course.Title</h1>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <p class="card-text">@Model.Course.Description</p>
-            <dl class="row">
-                <dt class="col-sm-3">Tags</dt>
-                <dd class="col-sm-9">@string.Join(", ", Model.Course.Tags)</dd>
-
-                <dt class="col-sm-3">Duration</dt>
-                <dd class="col-sm-9">@Model.Course.Duration</dd>
-
-                <dt class="col-sm-3">Posted</dt>
-                <dd class="col-sm-9">@Model.Course.Timestamp.ToLocalTime().ToString("g")</dd>
-
-                <dt class="col-sm-3">Link</dt>
-                <dd class="col-sm-9">
-                    <a href="@Model.Course.Link" target="_blank">@Model.Course.Link</a>
-                </dd>
-            </dl>
-        </div>
-    </div>
-
-    @if (User.Identity?.IsAuthenticated ?? false)
-    {
-        @if (Model.HasApplied)
+<div class="course-page">
+    <div class="course-card">
+        @if (Model.Course == null)
         {
-            <button class="btn btn-secondary" disabled>Application Pending</button>
+            <div class="alert alert-danger">Course not found.</div>
         }
         else
         {
-            <a class="btn btn-success"
-               asp-page="/ApplyCourse"
-               asp-route-id="@Model.Id">
-                Apply for This Course
-            </a>
+            <div class="course-title">@Model.Course.Title</div>
+            <div class="course-meta">
+                by @Model.Course.Company
+            </div>
+            <dl class="course-details">
+                <dt>Tags</dt>
+                <dd>@string.Join(", ", Model.Course.Tags)</dd>
+                <dt>Duration</dt>
+                <dd>@Model.Course.Duration</dd>
+                <dt>Posted</dt>
+                <dd>@Model.Course.Timestamp.ToLocalTime().ToString("g")</dd>
+                <dt>Link</dt>
+                <dd>
+                    <a href="@Model.Course.Link" target="_blank" style="color:#D6A243;">@Model.Course.Link</a>
+                </dd>
+            </dl>
+            <div class="course-actions">
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    @if (Model.HasApplied)
+                    {
+                        <button class="btn-course btn-secondary" disabled>Application Pending</button>
+                    }
+                    else
+                    {
+                        <a class="btn-course"
+                           asp-page="/ApplyCourse"
+                           asp-route-id="@Model.Id">
+                            Apply for This Course
+                        </a>
+                    }
+                }
+                else
+                {
+                    <a class="btn-course"
+                       asp-page="/Login"
+                       asp-route-returnUrl="@Url.Page("/course/{id}", new { id = Model.Id })">
+                        Login to Apply
+                    </a>
+                }
+            </div>
         }
-    }
-    else
-    {
-        <a class="btn btn-primary"
-           asp-page="/Login"
-           asp-route-returnUrl="@Url.Page("/course/{id}", new { id = Model.Id })">
-            Login to Apply
-        </a>
-    }
-}
+    </div>
+</div>
