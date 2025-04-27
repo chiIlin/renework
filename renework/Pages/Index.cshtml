@@ -89,5 +89,26 @@
             console.error('Error fetching anal.json:', error);
         }
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Визначаємо, чи користувач авторизований (записуємо це у ViewData у _Layout.cshtml)
+        var isAuthenticated = '@(User.Identity?.IsAuthenticated ?? false)'.toLowerCase() === 'true';
+
+        // Вибираємо обидві кнопки
+        var jobBtn = document.querySelector('.cta-button');
+        var startBtn = document.querySelector('.start-button');
+
+        function handleClick(e) {
+            e.preventDefault();
+            if (isAuthenticated) {
+                window.location.href = '/Courses';
+            } else {
+                window.location.href = '/Register';
+            }
+        }
+
+        if (jobBtn) jobBtn.addEventListener('click', handleClick);
+        if (startBtn) startBtn.addEventListener('click', handleClick);
+    });
     </script>
 }
