@@ -230,6 +230,7 @@ body {
     text-decoration: none;
     cursor: pointer;
     transition: transform 0.15s ease, color 0.15s ease; /* Швидкий трігер */
+    z-index: 9999; /* Стрілка зверху всього */
 }
 
 .back-arrow:hover {
@@ -249,21 +250,22 @@ body {
     .login-page {
         flex-direction: column;
         width: 90%;
+        max-width: 400px; /* Обмежує ширину для телефонів */
+        margin: 0 auto;   /* Центрує блок */
         height: auto;
     }
     
     .login-page:before {
-        display: none;
+        display: none; /* Прибираємо вертикальну риску */
     }
     
     .login-container {
         width: 100%;
-        padding: 25px 20px 42px 20px;
+        padding: 20px;
+        /* Прибираємо надмірне розтягування */
     }
     
     .auth-image {
-        width: 100%;
-        height: 250px;
-        padding: 20px;
+        display: none; /* Прибираємо картинку */
     }
 }
