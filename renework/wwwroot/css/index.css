@@ -271,7 +271,6 @@
     }
 }
 
-
 .comma {
     display: flex;
     justify-content: center;
@@ -295,5 +294,99 @@
         width: 10px;
         height: 45px;
         font-size: 1.8rem;
+    }
+}
+
+.ukraine-map-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#ukraine-map {
+    width: 100%;
+    height: auto;
+    background-color: transparent;
+}
+
+#ukraine-map path {
+    fill: #FFD700; /* Жовтий колір областей */
+    stroke: #000; /* Чорний контур */
+    stroke-width: 1;
+    cursor: pointer;
+    transition: fill 0.3s ease;
+}
+
+#ukraine-map path:hover {
+    fill: #FFC107; /* Трохи темніший жовтий при наведенні */
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Movie Credits Style */
+.movie-credits-container {
+    flex: 1;
+    min-width: 300px;
+    height: 300px;
+    background-color: #000;
+    border-radius: 10px;
+    margin: 15px;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.movie-credits {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    color: #3cb371; /* Greenish color */
+    font-size: 1.2rem;
+    line-height: 1.6;
+    animation: scrollCredits 30s linear infinite;
+    text-shadow: 0 0 5px rgba(60, 179, 113, 0.3);
+}
+
+@keyframes scrollCredits {
+    0% {
+        top: -100%;
+    }
+    100% {
+        top: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-credits-container {
+        height: 250px;
+    }
+    
+    .movie-credits {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-credits-container {
+        height: 200px;
+    }
+    
+    .movie-credits {
+        font-size: 0.9rem;
+        padding: 15px;
     }
 }
