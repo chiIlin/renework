@@ -1,0 +1,89 @@
+﻿/* Page background */
+.courses-page {
+    min-height: 100vh;
+    background: url('/Assets/LandscapeNoText_auth.png') no-repeat center center fixed;
+    background-size: cover;
+    padding: 2rem 1rem;
+}
+
+/* Header */
+.courses-header {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* List wrapper */
+.courses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Card */
+.course-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(15, 15, 15, 0.7);    /* reduced opacity */
+    border: 1px solid #1c4b8f;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+}
+
+/* Info block */
+.course-info {
+    flex: 1;
+    color: #fff;
+}
+
+/* Title in Teko */
+.course-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-family: 'Teko', sans-serif;     /* Teko font */
+}
+
+/* Company label */
+.course-company {
+    font-weight: normal;
+    color: #ffc107;
+    margin-left: 0.5rem;
+}
+
+/* Learn & Duration */
+.course-learn,
+.course-duration {
+    margin: 0.5rem 0;
+    color: #ccc;
+}
+
+/* Meta block */
+.course-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Progress label */
+.course-progress {
+    font-weight: bold;
+    color: #1c4b8f;
+}
+
+/* Button */
+.btn.view-details {
+    padding: 0.5rem 1rem;
+    border: 1px solid #fff;
+    color: #fff;
+    background: transparent;
+    border-radius: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.btn.view-details:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}

@@ -1,0 +1,38 @@
+﻿@page "/Recommendations"
+@model renework.Pages.RecommendationsModel
+
+<h1 class="my-4">Business Location Recommendations</h1>
+
+@if (!Model.Recommendations.Any())
+{
+    <p>No recommendations available.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var r in Model.Recommendations)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-capitalize">@r.Type</h5>
+                        <p class="card-text">
+                            <strong>Location:</strong> @r.Location<br />
+                            <strong>Area:</strong> @r.AreaSqm sqm<br />
+                            <strong>Price:</strong> $@r.Price
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="@r.Link" target="_blank" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // optionally, you could refresh via AJAX here
+    </script>
+}

@@ -1,10 +1,9 @@
-// Pages/Courses.cshtml.cs
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using renework.Repositories.Interfaces;
 using renework.MongoDB.Collections;
+using renework.Repositories.Interfaces;
+using System.Collections.Generic;
 
 namespace renework.Pages
 {
@@ -13,11 +12,8 @@ namespace renework.Pages
         private readonly ICourseRepository _courses;
 
         public CoursesModel(ICourseRepository courses)
-        {
-            _courses = courses;
-        }
+            => _courses = courses;
 
-        // exposed to the .cshtml
         public List<Course> Courses { get; set; } = new();
 
         public async Task OnGetAsync()

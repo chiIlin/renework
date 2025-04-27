@@ -21,6 +21,11 @@ using renework.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient("api", c => {
+    c.BaseAddress = new Uri("https://localhost:8000");
+});
+
+
 // 1) Bind Settings
 builder.Services.Configure<MongoSettings>(
     builder.Configuration.GetSection("MongoSettings"));
