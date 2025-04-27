@@ -19,6 +19,7 @@ namespace renework.Pages
         private readonly ICourseRepository _courses;
         private readonly IAppliedCourseRepository _applied;
         private readonly IBusinessDataRepository _business;
+        private const double MeterPrice = 50.0;
 
         public ProfileModel(
             IUserRepository users,
@@ -32,8 +33,7 @@ namespace renework.Pages
             _business = business;
         }
 
-        [BindProperty(SupportsGet = true)]
-        public string? Username { get; set; }
+        [BindProperty(SupportsGet = true)] public string? Username { get; set; }
 
         public User ProfileUser { get; set; } = null!;
         public bool IsOwnProfile { get; set; }
@@ -41,15 +41,12 @@ namespace renework.Pages
         public List<AppliedCourse> AppliedCourses { get; set; } = new();
         public List<Course> CompanyCourses { get; set; } = new();
 
-        [BindProperty]
-        public ChangeUsernameInput UsernameInput { get; set; } = new();
-        [BindProperty]
-        public ChangePasswordInput PasswordInput { get; set; } = new();
-        [BindProperty]
-        public UpdateDetailsInput DetailsInput { get; set; } = new();
-        [BindProperty]
-        public BusinessDataDto BusinessInput { get; set; } = new();
+        // Re-add these so your cshtml can bind to them:
+        [BindProperty] public ChangeUsernameInput UsernameInput { get; set; } = new();
+        [BindProperty] public ChangePasswordInput PasswordInput { get; set; } = new();
+        [BindProperty] public UpdateDetailsInput DetailsInput { get; set; } = new();
 
+        [BindProperty] public BusinessDataDto BusinessInput { get; set; } = new();
         private BusinessData? _existingBusiness;
 
         public class ChangeUsernameInput { public string NewUsername { get; set; } = ""; }
@@ -69,7 +66,7 @@ namespace renework.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            if (!(User.Identity?.IsAuthenticated ?? false))
+            if (!User.Identity?.IsAuthenticated ?? false)
                 return RedirectToPage("/Login");
 
             await InitializeProfileAsync();
@@ -78,15 +75,12 @@ namespace renework.Pages
 
         public async Task<IActionResult> OnPostChangeUsernameAsync()
         {
-            if (!(User.Identity?.IsAuthenticated ?? false))
-                return RedirectToPage("/Login");
-
             await InitializeProfileAsync();
             if (!IsOwnProfile) return Forbid();
 
             if (await _users.GetByUsernameAsync(UsernameInput.NewUsername) != null)
             {
-                ModelState.AddModelError(string.Empty, "Username already taken");
+                ModelState.AddModelError("", "Username taken");
                 return Page();
             }
 
@@ -97,15 +91,12 @@ namespace renework.Pages
 
         public async Task<IActionResult> OnPostChangePasswordAsync()
         {
-            if (!(User.Identity?.IsAuthenticated ?? false))
-                return RedirectToPage("/Login");
-
             await InitializeProfileAsync();
             if (!IsOwnProfile) return Forbid();
 
             if (!BCrypt.Net.BCrypt.Verify(PasswordInput.CurrentPassword, ProfileUser.HashedPassword))
             {
-                ModelState.AddModelError(string.Empty, "Current password incorrect");
+                ModelState.AddModelError("", "Current password incorrect");
                 return Page();
             }
 
@@ -116,9 +107,6 @@ namespace renework.Pages
 
         public async Task<IActionResult> OnPostUpdateDetailsAsync()
         {
-            if (!(User.Identity?.IsAuthenticated ?? false))
-                return RedirectToPage("/Login");
-
             await InitializeProfileAsync();
             if (!IsOwnProfile) return Forbid();
 
@@ -130,7 +118,8 @@ namespace renework.Pages
                 ProfileUser.Description = DetailsInput.Description;
             if (!string.IsNullOrWhiteSpace(DetailsInput.NewSkill))
                 ProfileUser.Skills.Add(DetailsInput.NewSkill);
-            if (!string.IsNullOrWhiteSpace(DetailsInput.CompanyName) && (UserRole == "Company" || UserRole == "Admin"))
+            if (!string.IsNullOrWhiteSpace(DetailsInput.CompanyName)
+                && (UserRole == "Company" || UserRole == "Admin"))
                 ProfileUser.CompanyName = DetailsInput.CompanyName;
 
             await _users.UpdateAsync(ProfileUser.Id, ProfileUser);
@@ -143,13 +132,12 @@ namespace renework.Pages
                 return Forbid();
 
             await InitializeProfileAsync();
-
             var existing = await _business.GetByUserIdAsync(ProfileUser.Id);
             if (existing == null) return NotFound();
 
             var data = new BusinessData
             {
-                Id = existing.Id,       // preserve ID
+                Id = existing.Id!,
                 UserId = ProfileUser.Id,
                 Location = new BusinessLocation
                 {
@@ -162,18 +150,18 @@ namespace renework.Pages
                 Budget = BusinessInput.Budget,
                 Description = BusinessInput.Description,
                 DowntimeStart = BusinessInput.DowntimeStart,
-                TotalLosses = existing.TotalLosses,   // keep previous TotalLosses if you don't recompute
                 CreatedAt = existing.CreatedAt
             };
 
+            data.CalculateTotalLosses(data.DowntimeStart,MeterPrice);
             await _business.UpdateAsync(existing.Id!, data);
-
             return RedirectToPage(new { username = ProfileUser.Username });
         }
 
         private async Task InitializeProfileAsync()
         {
-            var me = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new Exception("Not authenticated");
+            var me = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                     ?? throw new Exception("Not authenticated");
 
             if (string.IsNullOrEmpty(Username))
             {
@@ -188,39 +176,44 @@ namespace renework.Pages
 
             UserRole = User.FindFirstValue(ClaimTypes.Role) ?? "";
 
-            if (UserRole is "Company" or "Admin")
+            if (UserRole == "User" || UserRole == "Admin")
             {
-                var allCourses = await _courses.GetAllAsync();
-                CompanyCourses = allCourses.Where(c => c.Company == ProfileUser.Id).ToList();
+                var all = await _applied.GetAllAsync();
+                AppliedCourses = all.Where(a => a.UserId == ProfileUser.Id).ToList();
             }
-            if (UserRole is "User" or "Admin")
-            {
-                var allApplied = await _applied.GetAllAsync();
-                AppliedCourses = allApplied.Where(a => a.UserId == ProfileUser.Id).ToList();
-            }
-            if (UserRole is "Business" or "Admin")
-    {
-        // 1️⃣ Start by defaulting to today:
-        BusinessInput = new BusinessDataDto {
-            DowntimeStart = DateTime.UtcNow.Date
-        };
 
-        _existingBusiness = await _business.GetByUserIdAsync(ProfileUser.Id);
-        if (_existingBusiness != null)
-        {
-            // 2️⃣ Override with stored value if there is one
-            BusinessInput = new BusinessDataDto {
-                City           = _existingBusiness.Location.City,
-                Region         = _existingBusiness.Location.Region,
-                Address        = _existingBusiness.Location.Address,
-                AreaSqm        = _existingBusiness.AreaSqm,
-                MonthlyRevenue = _existingBusiness.MonthlyRevenue,
-                Budget         = _existingBusiness.Budget,
-                Description    = _existingBusiness.Description,
-                DowntimeStart  = _existingBusiness.DowntimeStart
-            };
+            if (UserRole == "Company" || UserRole == "Admin")
+            {
+                var all = await _courses.GetAllAsync();
+                CompanyCourses = all.Where(c => c.Company == ProfileUser.Id).ToList();
+            }
+
+            if (UserRole == "Business" || UserRole == "Admin")
+            {
+                BusinessInput = new BusinessDataDto { DowntimeStart = DateTime.UtcNow.Date };
+                _existingBusiness = await _business.GetByUserIdAsync(ProfileUser.Id);
+                if (_existingBusiness != null)
+                {
+                    BusinessInput = new BusinessDataDto
+                    {
+                        City = _existingBusiness.Location.City,
+                        Region = _existingBusiness.Location.Region,
+                        Address = _existingBusiness.Location.Address,
+                        AreaSqm = _existingBusiness.AreaSqm,
+                        MonthlyRevenue = _existingBusiness.MonthlyRevenue,
+                        Budget = _existingBusiness.Budget,
+                        Description = _existingBusiness.Description,
+                        DowntimeStart = _existingBusiness.DowntimeStart
+                    };
+                }
+            }
+
+            // pre‐fill the username/password/details forms
+            UsernameInput.NewUsername = ProfileUser.Username;
+            DetailsInput.FirstName = ProfileUser.FirstName;
+            DetailsInput.Surname = ProfileUser.Surname;
+            DetailsInput.Description = ProfileUser.Description;
+            DetailsInput.CompanyName = ProfileUser.CompanyName;
         }
-    }
-}
     }
 }

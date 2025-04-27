@@ -16,45 +16,20 @@ namespace renework.Controllers
     public class BusinessDataController : ControllerBase
     {
         private readonly IBusinessDataRepository _repo;
+        private const double MeterPrice = 50.0;
 
         public BusinessDataController(IBusinessDataRepository repo)
         {
             _repo = repo;
         }
 
-        /// <summary>
-        /// Get the business data for a given user ID (any authenticated user).
-        /// </summary>
-        [HttpGet("{userId}")]
-        [Authorize]
-        public async Task<ActionResult<BusinessData>> GetByUserId(string userId)
-        {
-            var data = await _repo.GetByUserIdAsync(userId);
-            if (data == null) return NotFound();
-            return Ok(data);
-        }
-
-        /// <summary>
-        /// Get all business data (admin only).
-        /// </summary>
-        [HttpGet]
-        [Authorize(Policy = "AdminOnly")]
-        public async Task<ActionResult<List<BusinessData>>> GetAll()
-        {
-            var all = await _repo.GetAllAsync();
-            return Ok(all);
-        }
-
-        /// <summary>
-        /// Create or initialize this user's business data (business or admin).
-        /// </summary>
         [HttpPost]
         [Authorize(Roles = "Business,Admin")]
         public async Task<IActionResult> Create([FromBody] BusinessDataDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             if (await _repo.GetByUserIdAsync(userId) != null)
-                return BadRequest("Business data already exists for this user.");
+                return BadRequest("Already exists");
 
             var data = new BusinessData
             {
@@ -70,28 +45,19 @@ namespace renework.Controllers
                 Budget = dto.Budget,
                 Description = dto.Description,
                 DowntimeStart = dto.DowntimeStart,
-                TotalLosses = 0, // stub, under development
                 CreatedAt = DateTime.UtcNow
             };
-
+            data.CalculateTotalLosses(data.DowntimeStart, MeterPrice);
             await _repo.CreateAsync(data);
-            return CreatedAtAction(
-                nameof(GetByUserId),
-                new { userId = data.UserId },
-                data
-            );
+            return CreatedAtAction(nameof(GetByUserId), new { userId }, data);
         }
 
-        /// <summary>
-        /// Update existing business data by its document ID (business or admin).
-        /// </summary>
         [HttpPut("{id}")]
         [Authorize(Roles = "Business,Admin")]
         public async Task<IActionResult> Update(string id, [FromBody] BusinessDataDto dto)
         {
             var existing = await _repo.GetByUserIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            if (existing == null || existing.Id != id)
-                return NotFound();
+            if (existing == null || existing.Id != id) return NotFound();
 
             existing.Location.City = dto.City;
             existing.Location.Region = dto.Region;
@@ -101,15 +67,28 @@ namespace renework.Controllers
             existing.Budget = dto.Budget;
             existing.Description = dto.Description;
             existing.DowntimeStart = dto.DowntimeStart;
-            // existing.TotalLosses left unchanged
+            existing.CalculateTotalLosses(existing.DowntimeStart, MeterPrice);
 
             await _repo.UpdateAsync(id, existing);
             return NoContent();
         }
 
-        /// <summary>
-        /// Delete business data by user ID (admin only).
-        /// </summary>
+        [HttpGet("{userId}")]
+        [Authorize]
+        public async Task<ActionResult<BusinessData>> GetByUserId(string userId)
+        {
+            var data = await _repo.GetByUserIdAsync(userId);
+            if (data == null) return NotFound();
+            return Ok(data);
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<ActionResult<List<BusinessData>>> GetAll()
+        {
+            return Ok(await _repo.GetAllAsync());
+        }
+
         [HttpDelete("{userId}")]
         [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Delete(string userId)

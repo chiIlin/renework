@@ -103,100 +103,116 @@
 
             <form method="post" asp-page-handler="ChangeUsername" asp-route-username="@Model.Username">
                 @Html.AntiForgeryToken()
-                <label asp-for="UsernameInput.NewUsername"></label>
-                <input asp-for="UsernameInput.NewUsername" class="form-control mb-2" />
+                <div class="mb-3">
+                    <label asp-for="UsernameInput.NewUsername" class="form-label"></label>
+                    <input asp-for="UsernameInput.NewUsername" class="form-control" />
+                    <span asp-validation-for="UsernameInput.NewUsername" class="text-danger"></span>
+                </div>
                 <button class="btn btn-success">Change Username</button>
             </form>
 
             <form method="post" asp-page-handler="ChangePassword" asp-route-username="@Model.Username" class="mt-4">
                 @Html.AntiForgeryToken()
-                <label asp-for="PasswordInput.CurrentPassword"></label>
-                <input asp-for="PasswordInput.CurrentPassword" type="password" class="form-control mb-2" />
-
-                <label asp-for="PasswordInput.NewPassword"></label>
-                <input asp-for="PasswordInput.NewPassword" type="password" class="form-control mb-2" />
-
+                <div class="mb-3">
+                    <label asp-for="PasswordInput.CurrentPassword" class="form-label"></label>
+                    <input asp-for="PasswordInput.CurrentPassword" type="password" class="form-control" />
+                    <span asp-validation-for="PasswordInput.CurrentPassword" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="PasswordInput.NewPassword" class="form-label"></label>
+                    <input asp-for="PasswordInput.NewPassword" type="password" class="form-control" />
+                    <span asp-validation-for="PasswordInput.NewPassword" class="text-danger"></span>
+                </div>
                 <button class="btn btn-success">Change Password</button>
             </form>
 
             <form method="post" asp-page-handler="UpdateDetails" asp-route-username="@Model.Username" class="mt-4">
                 @Html.AntiForgeryToken()
-                <label asp-for="DetailsInput.FirstName"></label>
-                <input asp-for="DetailsInput.FirstName" class="form-control mb-2" />
-
-                <label asp-for="DetailsInput.Surname"></label>
-                <input asp-for="DetailsInput.Surname" class="form-control mb-2" />
-
-                <label asp-for="DetailsInput.Description"></label>
-                <textarea asp-for="DetailsInput.Description" class="form-control mb-2"></textarea>
-
-                <label asp-for="DetailsInput.NewSkill"></label>
-                <input asp-for="DetailsInput.NewSkill" class="form-control mb-2" placeholder="Add a new skill" />
-
-                <label asp-for="DetailsInput.CompanyName"></label>
-                <input asp-for="DetailsInput.CompanyName" class="form-control mb-2" placeholder="Company name (if you’re a Company/Admin)" />
-
+                <div class="mb-3">
+                    <label asp-for="DetailsInput.FirstName" class="form-label"></label>
+                    <input asp-for="DetailsInput.FirstName" class="form-control" />
+                    <span asp-validation-for="DetailsInput.FirstName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DetailsInput.Surname" class="form-label"></label>
+                    <input asp-for="DetailsInput.Surname" class="form-control" />
+                    <span asp-validation-for="DetailsInput.Surname" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DetailsInput.Description" class="form-label"></label>
+                    <textarea asp-for="DetailsInput.Description" class="form-control"></textarea>
+                    <span asp-validation-for="DetailsInput.Description" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DetailsInput.NewSkill" class="form-label"></label>
+                    <input asp-for="DetailsInput.NewSkill" class="form-control" placeholder="Add a new skill" />
+                    <span asp-validation-for="DetailsInput.NewSkill" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DetailsInput.CompanyName" class="form-label"></label>
+                    <input asp-for="DetailsInput.CompanyName" class="form-control" placeholder="Company name (if Company/Admin)" />
+                    <span asp-validation-for="DetailsInput.CompanyName" class="text-danger"></span>
+                </div>
                 <button class="btn btn-success">Save Profile</button>
             </form>
-
-            @* BUSINESS MAINTENANCE FOR BUSINESS ROLE *@
-            @if (Model.UserRole == "Business" || Model.UserRole == "Admin")
-            {
-                <section class="profile-section mt-4">
-                    <h2>Business Profile</h2>
-                    <form method="post" asp-page-handler="UpdateBusiness">
-                        @Html.AntiForgeryToken()
-                        <div class="mb-3">
-                            <label asp-for="BusinessInput.City" class="form-label"></label>
-                            <input asp-for="BusinessInput.City" class="form-control" />
-                            <span asp-validation-for="BusinessInput.City" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="BusinessInput.Region" class="form-label"></label>
-                            <input asp-for="BusinessInput.Region" class="form-control" />
-                            <span asp-validation-for="BusinessInput.Region" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="BusinessInput.Address" class="form-label"></label>
-                            <input asp-for="BusinessInput.Address" class="form-control" />
-                            <span asp-validation-for="BusinessInput.Address" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="BusinessInput.AreaSqm" class="form-label"></label>
-                            <input asp-for="BusinessInput.AreaSqm" type="number" step="0.01" class="form-control" />
-                            <span asp-validation-for="BusinessInput.AreaSqm" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="BusinessInput.MonthlyRevenue" class="form-label"></label>
-                            <input asp-for="BusinessInput.MonthlyRevenue" type="number" step="0.01" class="form-control" />
-                            <span asp-validation-for="BusinessInput.MonthlyRevenue" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="BusinessInput.Budget" class="form-label"></label>
-                            <input asp-for="BusinessInput.Budget" type="number" step="0.01" class="form-control" />
-                            <span asp-validation-for="BusinessInput.Budget" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="BusinessInput.Description" class="form-label"></label>
-                            <textarea asp-for="BusinessInput.Description" class="form-control"></textarea>
-                            <span asp-validation-for="BusinessInput.Description" class="text-danger"></span>
-                        </div>
-                                    <div class="mb-3">
-                <label asp-for="BusinessInput.DowntimeStart" class="form-label"></label>
-                <input asp-for="BusinessInput.DowntimeStart"
-                       type="date"
-                       class="form-control mb-1" />
-                <span asp-validation-for="BusinessInput.DowntimeStart"
-                      class="text-danger"></span>
-            </div>
-                        <button type="submit" class="btn btn-success">Save Business Data</button>
-                    </form>
-                </section>
-            }
         </section>
     }
 
-    <!-- 3) COMPANY COURSES & ADD COURSE + APPLICATIONS -->
+    <!-- 3) BUSINESS MAINTENANCE FOR BUSINESS ROLE -->
+    @if (Model.UserRole == "Business" || Model.UserRole == "Admin")
+    {
+        <section class="profile-section mb-5">
+            <h2>Business Profile</h2>
+            <form method="post" asp-page-handler="UpdateBusiness">
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label asp-for="BusinessInput.City" class="form-label"></label>
+                    <input asp-for="BusinessInput.City" class="form-control" />
+                    <span asp-validation-for="BusinessInput.City" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="BusinessInput.Region" class="form-label"></label>
+                    <input asp-for="BusinessInput.Region" class="form-control" />
+                    <span asp-validation-for="BusinessInput.Region" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="BusinessInput.Address" class="form-label"></label>
+                    <input asp-for="BusinessInput.Address" class="form-control" />
+                    <span asp-validation-for="BusinessInput.Address" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="BusinessInput.AreaSqm" class="form-label"></label>
+                    <input asp-for="BusinessInput.AreaSqm" type="number" step="0.01" class="form-control" />
+                    <span asp-validation-for="BusinessInput.AreaSqm" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="BusinessInput.MonthlyRevenue" class="form-label"></label>
+                    <input asp-for="BusinessInput.MonthlyRevenue" type="number" step="0.01" class="form-control" />
+                    <span asp-validation-for="BusinessInput.MonthlyRevenue" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="BusinessInput.Budget" class="form-label"></label>
+                    <input asp-for="BusinessInput.Budget" type="number" step="0.01" class="form-control" />
+                    <span asp-validation-for="BusinessInput.Budget" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="BusinessInput.Description" class="form-label"></label>
+                    <textarea asp-for="BusinessInput.Description" class="form-control"></textarea>
+                    <span asp-validation-for="BusinessInput.Description" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="BusinessInput.DowntimeStart" class="form-label"></label>
+                    <input asp-for="BusinessInput.DowntimeStart"
+                           type="date"
+                           class="form-control mb-1" />
+                    <span asp-validation-for="BusinessInput.DowntimeStart" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-success">Save Business Data</button>
+            </form>
+        </section>
+    }
+
+    <!-- 4) COMPANY COURSES & APPLICATIONS -->
     @if ((role == "Company" || role == "Admin") && Model.IsOwnProfile)
     {
         <section class="profile-section mb-5">
@@ -225,7 +241,7 @@
         </section>
     }
 
-    <!-- 4) ADMIN CONTROLS -->
+    <!-- 5) ADMIN CONTROLS -->
     @if (role == "Admin")
     {
         <section class="profile-section mb-5">
