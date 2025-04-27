@@ -365,3 +365,4 @@ FodyWeavers.xsd
 renework/appsettings.json
 
 .env
+data_analytics/renework-112afa5157b0.jsondata_analytics/*.json
