@@ -1,47 +1,137 @@
-@page
+@page "/Register"
 @model renework.Pages.RegisterModel
 @{
     ViewData["Title"] = "Register";
+    Layout = null;
 }
 
-<h1 class="my-4">Create Account</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RENEWORK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+</head>
+<body>
+    <a href="/" class="back-arrow" aria-label="Back to Home">&larr;</a>
+    <div class="login-page register-page"><!-- Використовуємо ті ж стилі, змінюємо лише назву -->
+        <div class="login-container register-container">
+            <div class="login-container-top register-container-top">
+                <div class="logo-section">
+                    <img src="~/Assets/logo.png" alt="RENEWORK" class="logo" />
+                    <h1 class="brand-name">RENEWORK</h1>
+                </div>
 
-<form method="post" class="mx-auto" style="max-width:400px;">
-    <div class="mb-3">
-        <label asp-for="Input.Username" class="form-label">Username</label>
-        <input asp-for="Input.Username" class="form-control" />
-        <span asp-validation-for="Input.Username" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Input.Email" class="form-label">Email</label>
-        <input asp-for="Input.Email" type="email" class="form-control" />
-        <span asp-validation-for="Input.Email" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Input.Password" class="form-label">Password</label>
-        <input asp-for="Input.Password" type="password" class="form-control" />
-        <span asp-validation-for="Input.Password" class="text-danger"></span>
-    </div>
+                <h2 class="login-title">REGISTER</h2>
 
-    <fieldset class="mb-4">
-        <legend>Account Type</legend>
-        <div class="form-check">
-            <input asp-for="Input.SelectedRole" class="form-check-input" type="radio" value="user" checked />
-            <label class="form-check-label">Individual</label>
+                <form method="post" class="login-form register-form">
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username:</label>
+                        <input asp-for="Input.Username" class="form-control" required />
+                        <span asp-validation-for="Input.Username" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email:</label>
+                        <input asp-for="Input.Email" class="form-control" type="email" required />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password:</label>
+                        <input asp-for="Input.Password" class="form-control" type="password" required />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <!-- Keep a hidden input so the three buttons above the image can still set the account type -->
+                    <input asp-for="Input.SelectedRole" type="hidden" value="user" />
+
+                    <div class="form-actions">
+                        <button type="submit" class="login-btn">REGISTER</button>
+                    </div>
+                </form>
+
+                <div class="separator">
+                    <span>OR</span>
+                </div>
+
+                <button class="google-btn">GOOGLE</button>
+            </div>
+            <div class="login-links register-links">
+                <div class="create-account">
+                    <a href="/Login">Already have an account?</a>
+                </div>
+            </div>
         </div>
-        <div class="form-check">
-            <input asp-for="Input.SelectedRole" class="form-check-input" type="radio" value="business" />
-            <label class="form-check-label">Business</label>
-        </div>
-        <div class="form-check">
-            <input asp-for="Input.SelectedRole" class="form-check-input" type="radio" value="company" />
-            <label class="form-check-label">Company</label>
-        </div>
-    </fieldset>
 
-    <button type="submit" class="btn btn-primary w-100">Register</button>
-</form>
+        <div class="auth-image">
+            <div class="account-type-buttons">
+                <button type="button" class="account-type-btn active" data-role="user" onclick="selectAccountType(this)">
+                    <img src="/Assets/user-icon-reg-black.png" alt="User" class="account-icon" data-icon-white="/Assets/user-icon-reg-white.png" data-icon-black="/Assets/user-icon-reg-black.png" />
+                    <span>User</span>
+                </button>
+                <button type="button" class="account-type-btn" data-role="business" onclick="selectAccountType(this)">
+                    <img src="/Assets/business-icon-reg-white.png" alt="Business" class="account-icon" data-icon-white="/Assets/business-icon-reg-white.png" data-icon-black="/Assets/business-icon-reg-black.png" />
+                    <span>Business</span>
+                </button>
+                <button type="button" class="account-type-btn" data-role="company" onclick="selectAccountType(this)">
+                    <img src="/Assets/company-icon-reg-white.png" alt="Company" class="account-icon" data-icon-white="/Assets/company-icon-reg-white.png" data-icon-black="/Assets/company-icon-reg-black.png" />
+                    <span>Company</span>
+                </button>
+            </div>
+            <img src="~/Assets/image_auth.png" alt="Register illustration" class="auth-image-reduced" />
+        </div>
+    </div>
 
-@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
-}
+
+    <script>
+        function selectAccountType(clickedButton) {
+            const buttons = document.querySelectorAll('.account-type-btn');
+            const selectedRole = clickedButton.getAttribute('data-role');
+
+            buttons.forEach(btn => {
+                const img = btn.querySelector('.account-icon');
+                // *** Переконайтесь, що шлях тут правильний після перейменування ***
+                const whiteIcon = img.getAttribute('data-icon-white');
+
+                btn.classList.remove('active'); // Remove active class from all
+                if (whiteIcon) { // Перевірка, чи атрибут існує
+                     img.src = whiteIcon; // Set all icons to white initially
+                }
+            });
+
+            // Activate the clicked button
+            clickedButton.classList.add('active');
+            const img = clickedButton.querySelector('.account-icon');
+             // *** Переконайтесь, що шлях тут правильний після перейменування ***
+            const blackIcon = img.getAttribute('data-icon-black');
+             if (blackIcon) { // Перевірка, чи атрибут існує
+                img.src = blackIcon; // Set clicked button's icon to black
+             }
+
+            // Update the hidden input value
+            document.querySelector('input[name="Input.SelectedRole"]').value = selectedRole;
+        }
+
+        // Ensure the default selection is visually correct on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const defaultActiveButton = document.querySelector('.account-type-btn.active');
+            if (defaultActiveButton) {
+                const img = defaultActiveButton.querySelector('.account-icon');
+                // *** Переконайтесь, що шлях тут правильний після перейменування ***
+                const blackIcon = img.getAttribute('data-icon-black');
+                 if (blackIcon) { // Перевірка, чи атрибут існує
+                    img.src = blackIcon; // Ensure the default active button shows the black icon
+                 }
+            }
+        });
+    </script>
+</body>
+</html>
