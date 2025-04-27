@@ -1,0 +1,103 @@
+[
+    {
+        "region": "Cherkasy Oblast",
+        "total_loss": 1256743.12
+    },
+    {
+        "region": "Chernihiv Oblast",
+        "total_loss": 218939.41
+    },
+    {
+        "region": "Chernivtsi Oblast",
+        "total_loss": 874321.55
+    },
+    {
+        "region": "Dnipropetrovsk Oblast",
+        "total_loss": 1063917.21
+    },
+    {
+        "region": "Donetsk Oblast",
+        "total_loss": 2549872.36
+    },
+    {
+        "region": "Ivano-Frankivsk Oblast",
+        "total_loss": 2832780.39
+    },
+    {
+        "region": "Kharkiv Oblast",
+        "total_loss": 342061.72
+    },
+    {
+        "region": "Kherson Oblast",
+        "total_loss": 1623457.89
+    },
+    {
+        "region": "Khmelnytskyi Oblast",
+        "total_loss": 654321.12
+    },
+    {
+        "region": "Kirovohrad Oblast",
+        "total_loss": 489321.44
+    },
+    {
+        "region": "Kyiv Oblast",
+        "total_loss": 210944.99
+    },
+    {
+        "region": "Kyiv",
+        "total_loss": 1987432.67
+    },
+    {
+        "region": "Luhansk Oblast",
+        "total_loss": 2316789.45
+    },
+    {
+        "region": "Lviv Oblast",
+        "total_loss": 802618.56
+    },
+    {
+        "region": "Mykolaiv Oblast",
+        "total_loss": 1489723.01
+    },
+    {
+        "region": "Odesa Oblast",
+        "total_loss": 1430827.04
+    },
+    {
+        "region": "Poltava Oblast",
+        "total_loss": 593827.11
+    },
+    {
+        "region": "Rivne Oblast",
+        "total_loss": 472819.32
+    },
+    {
+        "region": "Sumy Oblast",
+        "total_loss": 1278432.41
+    },
+    {
+        "region": "Ternopil Oblast",
+        "total_loss": 697432.89
+    },
+    {
+        "region": "Vinnytsia Oblast",
+        "total_loss": 823456.77
+    },
+    {
+        "region": "Volyn Oblast",
+        "total_loss": 612378.88
+    },
+    {
+        "region": "Zakarpattia Oblast",
+        "total_loss": 589214.77
+    },
+    {
+        "region": "Zaporizhzhia Oblast",
+        "total_loss": 2178432.55
+    },
+    {
+        "region": "Zhytomyr Oblast",
+        "total_loss": 721834.88
+    }
+    ]
+    

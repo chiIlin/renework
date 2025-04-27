@@ -11,34 +11,33 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
         <div class="cta-container">
-    <a href="Courses" class="cta-button">Find YOUR JOB</a>
-</div>
-
+            <a href="Courses" class="cta-button">Find YOUR JOB</a>
+        </div>
     </div>
 </div>
+
 <div class="statistics-section">
     <div class="container">
         <div class="counter-container">
             <h2 class="section-title">TOTAL LOSSES:</h2>
             <div class="counter-display">
-    <div class="currency-symbol">€</div>
-    <div class="digits-wrapper">
-        <div class="digit">0</div>
-        <div class="digit">0</div>
-        <div class="digit">0</div>
-        <span class="comma">,</span> <!-- Кома -->
+                <div class="currency-symbol">€</div>
+                <div class="digits-wrapper">
+                    <div class="digit">0</div>
+                    <div class="digit">0</div>
+                    <div class="digit">0</div>
+                    <span class="comma">,</span>
 
-        <div class="digit">0</div>
-        <div class="digit">0</div>
-        <div class="digit">0</div>
-        <span class="comma">,</span> <!-- Кома -->
-        
-        <div class="digit">0</div>
-        <div class="digit">0</div>
-        <div class="digit">0</div>
-    </div>
-</div>
-
+                    <div class="digit">0</div>
+                    <div class="digit">0</div>
+                    <div class="digit">0</div>
+                    <span class="comma">,</span>
+                    
+                    <div class="digit">0</div>
+                    <div class="digit">0</div>
+                    <div class="digit">0</div>
+                </div>
+            </div>
         </div>
         
         <div class="yearly-stats">
@@ -47,8 +46,10 @@
                 <div class="stats-text">
                     <p>Since the outbreak of the war, our country has lost a lot of finances, and small businesses have suffered greatly. Some suffered a tragedy, some closed down due to lack of clients and customers, and some were laid off. We are going through hard times, and the chart shows exactly that. It takes a lot of analytics and effort to solve this problem.</p>
                 </div>
-                <div class="chart-placeholder" id="losses-chart">
-                    <!-- Chart will be inserted here -->
+                <div class="movie-credits-container">
+                    <div id="anal-container" class="movie-credits">
+                        <!-- Text from anal.json will be injected here -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,6 +61,33 @@
     </div>
 </div>
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/home.css" />
+@section Scripts {
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const response = await fetch('/anal.json');
+            let data = await response.text();
+            const container = document.getElementById('anal-container');
+            
+            if (container) {
+                // Remove curly braces, commas, and quotes from JSON
+                data = data.replace(/[{}"]/g, ''); // Remove all curly braces and quotes
+                data = data.replace(/,/g, ' '); // Replace commas with spaces
+                
+                // Format the text to look like movie credits
+                const lines = data.split('\n')
+                    .filter(line => line.trim() !== '')
+                    .map(line => {
+                        // Clean up any JSON formatting like colons
+                        return line.replace(/:/g, ': ').trim();
+                    });
+                
+                const formattedText = lines.join('<br><br>');
+                container.innerHTML = formattedText;
+            }
+        } catch (error) {
+            console.error('Error fetching anal.json:', error);
+        }
+    });
+    </script>
 }
