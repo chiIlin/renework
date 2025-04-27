@@ -1,14 +1,14 @@
-﻿// MongoDB/Collections/BusinessData.cs
-using System;
+﻿using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace renework.MongoDB.Collections
 {
+    [BsonIgnoreExtraElements]
     public class BusinessData
     {
         [BsonId, BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = string.Empty;
+        public string? Id { get; set; }
 
         [BsonElement("userId"), BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; } = string.Empty;
@@ -28,15 +28,31 @@ namespace renework.MongoDB.Collections
         [BsonElement("description")]
         public string Description { get; set; } = string.Empty;
 
-        [BsonElement("downtimeMonths")]
-        public int DowntimeMonths { get; set; }
+        [BsonElement("downtimeStart")]
+        public DateTime DowntimeStart { get; set; }
 
-        // Under development; stubbed as zero for now
         [BsonElement("totalLosses")]
         public double TotalLosses { get; set; }
 
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public void CalculateTotalLosses(DateTime ended, double meterPrice)
+        {
+            var now = DateTime.UtcNow;
+            int yearDiff  = now.Year  - ended.Year;
+            int monthDiff = now.Month - ended.Month;
+            int dayDiff   = now.Day   - ended.Day;
+
+            double D = 12 * yearDiff
+                     + monthDiff
+                     + (dayDiff / 30.0);
+
+            double A = AreaSqm * meterPrice;
+            double B = MonthlyRevenue * D;
+
+            TotalLosses = A + B;
+        }
     }
 
     public class BusinessLocation

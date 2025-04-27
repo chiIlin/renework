@@ -69,7 +69,7 @@ namespace renework.Controllers
                 MonthlyRevenue = dto.MonthlyRevenue,
                 Budget = dto.Budget,
                 Description = dto.Description,
-                DowntimeMonths = dto.DowntimeMonths,
+                DowntimeStart = dto.DowntimeStart,
                 TotalLosses = 0, // stub, under development
                 CreatedAt = DateTime.UtcNow
             };
@@ -100,7 +100,7 @@ namespace renework.Controllers
             existing.MonthlyRevenue = dto.MonthlyRevenue;
             existing.Budget = dto.Budget;
             existing.Description = dto.Description;
-            existing.DowntimeMonths = dto.DowntimeMonths;
+            existing.DowntimeStart = dto.DowntimeStart;
             // existing.TotalLosses left unchanged
 
             await _repo.UpdateAsync(id, existing);

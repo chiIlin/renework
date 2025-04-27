@@ -181,11 +181,14 @@
                             <textarea asp-for="BusinessInput.Description" class="form-control"></textarea>
                             <span asp-validation-for="BusinessInput.Description" class="text-danger"></span>
                         </div>
-                        <div class="mb-3">
-                            <label asp-for="BusinessInput.DowntimeMonths" class="form-label"></label>
-                            <input asp-for="BusinessInput.DowntimeMonths" type="number" class="form-control" />
-                            <span asp-validation-for="BusinessInput.DowntimeMonths" class="text-danger"></span>
-                        </div>
+                                    <div class="mb-3">
+                <label asp-for="BusinessInput.DowntimeStart" class="form-label"></label>
+                <input asp-for="BusinessInput.DowntimeStart"
+                       type="date"
+                       class="form-control mb-1" />
+                <span asp-validation-for="BusinessInput.DowntimeStart"
+                      class="text-danger"></span>
+            </div>
                         <button type="submit" class="btn btn-success">Save Business Data</button>
                     </form>
                 </section>
