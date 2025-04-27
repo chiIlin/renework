@@ -11,16 +11,21 @@ from django.views.decorators.http import require_GET
 from pymongo import MongoClient
 from bson import ObjectId
 
+
 # ——————————————————————————————————————————————————————————
 # Завантажуємо .env і ініціалізуємо клієнти
 # ——————————————————————————————————————————————————————————
-load_dotenv()
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 MONGO_URI       = os.getenv("MONGO_URI")
 MONGO_DB        = os.getenv("MONGO_DB")
 GOOGLE_API_KEY  = os.getenv("API")  # ваш Google API key
 CX              = os.getenv("KEY")  # Custom Search Engine ID
+BQ_PROJECT_ID  = os.getenv("BQ_PROJECT_ID")
+BQ_DATASET     = os.getenv("BQ_DATASET")
 
-mongo = MongoClient(MONGO_URI)[MONGO_DB]
+mongo_client = MongoClient(MONGO_URI)
+db           = mongo_client[MONGO_DB]
 
 def search_properties_with_google(biz):
     """
@@ -38,6 +43,7 @@ def search_properties_with_google(biz):
     resp = requests.get("https://www.googleapis.com/customsearch/v1", params=params, timeout=5)
     resp.raise_for_status()
     data = resp.json()
+    print("CSE RESPONSE:", data)   # or use logging.debug
 
     listings = []
     for item in data.get("items", []):
@@ -63,7 +69,7 @@ def google_search_test(request, biz_id):
     Протестувати тільки Google CSE пошук по бізнесу.
     """
     try:
-        biz = mongo.BusinessData.find_one({"_id": ObjectId(biz_id)})
+        biz = db.BusinessData.find_one({"_id": ObjectId(biz_id)})
     except Exception:
         return JsonResponse({"error": "Invalid business ID"}, status=400)
     if not biz:
@@ -88,7 +94,7 @@ def property_recommendations(request, biz_id):
     except Exception:
         return JsonResponse({"error": "Invalid business ID"}, status=400)
 
-    biz = mongo.BusinessData.find_one({"_id": oid})
+    biz = db.BusinessData.find_one({"_id": oid})
     if not biz:
         return JsonResponse({"error": "Business not found"}, status=404)
 

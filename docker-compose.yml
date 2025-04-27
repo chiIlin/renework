@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  renework:
+    build: ./renework
+    ports:
+      - "5000:5000"
+    depends_on:
+      - analytics
+      - mongo
+    environment:
+      MONGO_CONN: "mongodb://mongo:27017/renework"
+      ANALYTICS_URL: "http://analytics:8000"
+  analytics:
+    build: ./data_analytics
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+    env_file:
+      - ./data_analytics/.env
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

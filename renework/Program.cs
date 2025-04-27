@@ -18,11 +18,15 @@ using renework.Repositories;
 using renework.Repositories.Interfaces;
 using Microsoft.OpenApi.Models;
 using renework.MongoDB;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient("api", c => {
-    c.BaseAddress = new Uri("https://localhost:8000");
+builder.Services.AddHttpClient("analytics", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Analytics_URL"]);
+    client.DefaultRequestHeaders.Accept.Add(
+        new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
 

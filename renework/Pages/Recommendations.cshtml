@@ -1,38 +1,57 @@
-﻿@page "/Recommendations"
+﻿@page "{bizid}" 
 @model renework.Pages.RecommendationsModel
-
-<h1 class="my-4">Business Location Recommendations</h1>
-
-@if (!Model.Recommendations.Any())
-{
-    <p>No recommendations available.</p>
-}
-else
-{
-    <div class="row">
-        @foreach (var r in Model.Recommendations)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title text-capitalize">@r.Type</h5>
-                        <p class="card-text">
-                            <strong>Location:</strong> @r.Location<br />
-                            <strong>Area:</strong> @r.AreaSqm sqm<br />
-                            <strong>Price:</strong> $@r.Price
-                        </p>
-                    </div>
-                    <div class="card-footer">
-                        <a href="@r.Link" target="_blank" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+@{
+    ViewData["Title"] = "Property Recommendations";
+    // grab bizId from query string if you want to show it
+    var bizId = Request.Query["bizId"].ToString();
 }
 
-@section Scripts {
-    <script>
-        // optionally, you could refresh via AJAX here
-    </script>
-}
+<div class="profile-container" style="background: rgba(255, 255, 255, 0.8); border: 1px solid #1c4b8f; border-radius: 8px; padding: 20px; max-width: 900px; margin: 40px auto;">
+    <h1 style="color: #1c4b8f; text-align:center;">
+        Property Recommendations
+    </h1>
+
+    @if (!string.IsNullOrEmpty(bizId))
+    {
+        <h2 style="color: #185a9d; text-align:center;">
+            Business: @bizId
+        </h2>
+    }
+
+    @if (Model.Recommendations == null || !Model.Recommendations.Any())
+    {
+        <p style="text-align:center; font-style:italic;">
+            No recommendations available.
+        </p>
+    }
+    else
+    {
+        <table class="table" style="width:100%; border-collapse:collapse; margin-top:20px;">
+            <thead style="background-color:#1c4b8f; color:white;">
+                <tr>
+                    <th style="padding:8px; border:1px solid #ccc;">Type</th>
+                    <th style="padding:8px; border:1px solid #ccc;">Location</th>
+                    <th style="padding:8px; border:1px solid #ccc;">Area (sqm)</th>
+                    <th style="padding:8px; border:1px solid #ccc;">Price (₴)</th>
+                    <th style="padding:8px; border:1px solid #ccc;">Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rec in Model.Recommendations)
+                {
+                    <tr style="background: rgba(28, 75, 143, 0.1);">
+                        <td style="padding:8px; border:1px solid #ccc;">@rec.Type</td>
+                        <td style="padding:8px; border:1px solid #ccc;">@rec.Location</td>
+                        <td style="padding:8px; border:1px solid #ccc;">@(rec.Area_sqm?.ToString("F1") ?? "-")</td>
+                        <td style="padding:8px; border:1px solid #ccc;">@(rec.Price?.ToString("N0") ?? "-")</td>
+                        <td style="padding:8px; border:1px solid #ccc;">
+                            <a href="@rec.Link" target="_blank" style="color:#1c4b8f; text-decoration:none;">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

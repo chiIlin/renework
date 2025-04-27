@@ -1,6 +1,4 @@
-// Pages/Recommendations.cshtml.cs
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -18,15 +16,25 @@ namespace renework.Pages
             _http = http;
         }
 
+        // will hold the JSON from Django
         public List<RecommendationDto> Recommendations { get; set; } = new();
 
-        public async Task OnGetAsync()
+        // accept bizId as a query‐string or route parameter
+        // Program.cs (BaseAddress should already be http://analytics:8000/api/)
+
+        public async Task OnGetAsync(string bizId)
         {
-            var client = _http.CreateClient();
-            // TODO: set BaseAddress or use named client in Program.cs
-            var result = await client.GetFromJsonAsync<List<RecommendationDto>>("/api/recommendations");
+            if (string.IsNullOrWhiteSpace(bizId)) return;
+
+            var client = _http.CreateClient("analytics");
+
+            // note the "api/" prefix is already in BaseAddress
+            var result = await client.GetFromJsonAsync<List<RecommendationDto>>(
+                $"api/business/{bizId}/google-search/");
+
             if (result != null)
                 Recommendations = result;
         }
+
     }
 }

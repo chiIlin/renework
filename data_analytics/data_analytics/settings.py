@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 import os
 from dotenv import load_dotenv
 
@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-&mp=wmio0u%nj%)#ywc6a5#f%2v!_qz*#12fi$^@vx)^pvgwd4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -28,10 +28,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # ↓ analytics APIs
+    'rest_framework',
+    'corsheaders',
     'analysis'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -114,3 +118,23 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ─── CORS ──────────────────────────────────────────────────────────────────────
+# allow your .NET Core site to call these API endpoints
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5000",
+    "https://localhost:5000",
+]
+
+# ─── EXTERNAL SERVICE CONFIG ───────────────────────────────────────────────────
+# MongoDB
+MONGO_URI = os.getenv("MONGO_URI")
+MONGO_DB  = os.getenv("MONGO_DB")
+
+# BigQuery
+BQ_PROJECT_ID = os.getenv("BQ_PROJECT_ID")
+BQ_DATASET    = os.getenv("BQ_DATASET")
+
+# Google Custom Search
+GOOGLE_API_KEY = os.getenv("API")
+CX             = os.getenv("KEY")
