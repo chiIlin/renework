@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /renework/appsettings.json
 renework/appsettings.json
+
+.env
