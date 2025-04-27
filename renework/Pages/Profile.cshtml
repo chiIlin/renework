@@ -213,7 +213,6 @@
     @if ((Model.UserRole == "Company" || Model.UserRole == "Admin") && Model.IsOwnProfile)
     {
         <section class="profile-section mb-5">
-            <h2>Manage My Courses</h2>
             <a asp-page="/AddCourse" class="btn btn-add">Add Course</a>
             <a asp-page="/Applications" class="btn btn-primary btn-add">View Applications</a>
             <table class="course-table">
